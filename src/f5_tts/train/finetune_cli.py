@@ -32,7 +32,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Train CFM Model")
 
     parser.add_argument(
-        "--exp_name", type=str, default="F5TTS_Base", choices=["F5TTS_Base", "E2TTS_Base"], help="Experiment name"
+        "--exp_name", type=str, default="F5TTS_Base", choices=["F5TTS_Base", "E2TTS_Base", "F5TTS_Small"], help="Experiment name"
     )
     parser.add_argument("--dataset_name", type=str, default="Emilia_ZH_EN", help="Name of the dataset to use")
     parser.add_argument("--learning_rate", type=float, default=1e-5, help="Learning rate for training")
@@ -70,6 +70,7 @@ def parse_args():
         help="Log inferenced samples per ckpt save updates",
     )
     parser.add_argument("--logger", type=str, default=None, choices=["wandb", "tensorboard"], help="logger")
+    parser.add_argument("--wandb_id", type=str, default=None, help="wandb_id only used when --logger=wandb")
     parser.add_argument(
         "--bnb_optimizer",
         action="store_true",
@@ -77,7 +78,6 @@ def parse_args():
     )
 
     return parser.parse_args()
-
 
 # -------------------------- Training Settings -------------------------- #
 
@@ -106,6 +106,16 @@ def main():
                 ckpt_path = str(cached_path("hf://SWivid/E2-TTS/E2TTS_Base/model_1200000.pt"))
             else:
                 ckpt_path = args.pretrain
+    elif args.exp_name == "F5TTS_Small":
+        wandb_resume_id = args.wandb_id
+        model_cls = DiT
+        model_cfg = dict(dim=768, depth=18, heads=12, ff_mult=2, text_dim=512, conv_layers=4)
+        if args.finetune:
+            if args.pretrain is None:
+                ckpt_path = str(cached_path("hf://SWivid/F5-TTS/F5TTS_Base/model_1200000.pt"))
+            else:
+                ckpt_path = args.pretrain
+    
 
     if args.finetune:
         if not os.path.isdir(checkpoint_path):
@@ -117,7 +127,7 @@ def main():
         file_checkpoint = os.path.join(checkpoint_path, file_checkpoint)
         if not os.path.isfile(file_checkpoint):
             shutil.copy2(ckpt_path, file_checkpoint)
-            print("copy checkpoint for finetune")
+            print("Copy checkpoint for finetune")
 
     # Use the tokenizer and tokenizer_path provided in the command line arguments
     tokenizer = args.tokenizer

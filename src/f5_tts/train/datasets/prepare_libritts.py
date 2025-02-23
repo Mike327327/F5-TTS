@@ -61,7 +61,7 @@ def main():
         for line in tqdm(result, desc="Writing to raw.arrow ..."):
             writer.write(line)
 
-    # dup a json separately saving duration in case for DynamicBatchSampler ease
+    # dump a json separately saving duration in case for DynamicBatchSampler case
     with open(f"{save_dir}/duration.json", "w", encoding="utf-8") as f:
         json.dump({"duration": duration_list}, f, ensure_ascii=False)
 
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     tokenizer = "char"  # "pinyin" | "char"
 
     SUB_SET = ["train-clean-100", "train-clean-360", "train-other-500"]
-    dataset_dir = "<SOME_PATH>/LibriTTS"
+    dataset_dir = "/storage/brno2/home/michal327/LibriTTS/LibriTTS"
     dataset_name = f"LibriTTS_{'_'.join(SUB_SET)}_{tokenizer}".replace("train-clean-", "").replace("train-other-", "")
     save_dir = str(files("f5_tts").joinpath("../../")) + f"/data/{dataset_name}"
     print(f"\nPrepare for {dataset_name}, will save to {save_dir}\n")
