@@ -27,7 +27,7 @@ def parse_args():
 
     # num_warmup_updates = 300 for 5000 sample about 10 hours
 
-    # change save_per_updates , last_per_updates change this value what you need  ,
+    # change save_per_updates , last_per_updates change this value what you need
 
     parser = argparse.ArgumentParser(description="Train CFM Model")
 
@@ -86,10 +86,13 @@ def main():
     args = parse_args()
 
     checkpoint_path = str(files("f5_tts").joinpath(f"../../ckpts/{args.dataset_name}"))
+    
+    wandb_resume_id = args.wandb_id
+    wandb_project="CFM-TTS",
+    wandb_run_name=f"{args.exp_name}_{mel_spec_type}_{args.tokenizer}_{args.dataset_name}"
 
     # Model parameters based on experiment name
     if args.exp_name == "F5TTS_Base":
-        wandb_resume_id = None
         model_cls = DiT
         model_cfg = dict(dim=1024, depth=22, heads=16, ff_mult=2, text_dim=512, conv_layers=4)
         if args.finetune:
@@ -98,7 +101,6 @@ def main():
             else:
                 ckpt_path = args.pretrain
     elif args.exp_name == "E2TTS_Base":
-        wandb_resume_id = None
         model_cls = UNetT
         model_cfg = dict(dim=1024, depth=24, heads=16, ff_mult=4)
         if args.finetune:
@@ -107,7 +109,6 @@ def main():
             else:
                 ckpt_path = args.pretrain
     elif args.exp_name == "F5TTS_Small":
-        wandb_resume_id = args.wandb_id
         model_cls = DiT
         model_cfg = dict(dim=768, depth=18, heads=12, ff_mult=2, text_dim=512, conv_layers=4)
         if args.finetune:
@@ -160,8 +161,8 @@ def main():
 
     trainer = Trainer(
         model,
-        args.epochs,
-        args.learning_rate,
+        epochs=args.epochs,
+        learning_rate=args.learning_rate,
         num_warmup_updates=args.num_warmup_updates,
         save_per_updates=args.save_per_updates,
         keep_last_n_checkpoints=args.keep_last_n_checkpoints,
@@ -172,12 +173,13 @@ def main():
         grad_accumulation_steps=args.grad_accumulation_steps,
         max_grad_norm=args.max_grad_norm,
         logger=args.logger,
-        wandb_project=args.dataset_name,
-        wandb_run_name=args.exp_name,
+        wandb_project=wandb_project,
+        wandb_run_name=wandb_run_name,
         wandb_resume_id=wandb_resume_id,
-        log_samples=args.log_samples,
         last_per_updates=args.last_per_updates,
+        log_samples=args.log_samples,
         bnb_optimizer=args.bnb_optimizer,
+        mel_spec_type=mel_spec_type
     )
 
     train_dataset = load_dataset(args.dataset_name, tokenizer, mel_spec_kwargs=mel_spec_kwargs)
