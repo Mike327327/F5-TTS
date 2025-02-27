@@ -70,7 +70,6 @@ def parse_args():
         help="Log inferenced samples per ckpt save updates",
     )
     parser.add_argument("--logger", type=str, default=None, choices=["wandb", "tensorboard"], help="logger")
-    parser.add_argument("--wandb_id", type=str, default=None, help="wandb_id only used when --logger=wandb")
     parser.add_argument(
         "--bnb_optimizer",
         action="store_true",
@@ -87,9 +86,7 @@ def main():
 
     checkpoint_path = str(files("f5_tts").joinpath(f"../../ckpts/{args.dataset_name}"))
     
-    wandb_resume_id = args.wandb_id
-    wandb_project="CFM-TTS",
-    wandb_run_name=f"{args.exp_name}_{mel_spec_type}_{args.tokenizer}_{args.dataset_name}"
+    wandb_resume_id = None
 
     # Model parameters based on experiment name
     if args.exp_name == "F5TTS_Base":
@@ -173,8 +170,6 @@ def main():
         grad_accumulation_steps=args.grad_accumulation_steps,
         max_grad_norm=args.max_grad_norm,
         logger=args.logger,
-        wandb_project=wandb_project,
-        wandb_run_name=wandb_run_name,
         wandb_resume_id=wandb_resume_id,
         last_per_updates=args.last_per_updates,
         log_samples=args.log_samples,
