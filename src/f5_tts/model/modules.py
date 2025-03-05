@@ -433,7 +433,7 @@ class AttnProcessor:
         else:
             attn_mask = None
 
-        x = F.scaled_dot_product_attention(query, key, value, attn_mask=attn_mask, dropout_p=0.0, is_causal=False)
+        x = F.scaled_dot_product_attention(query, key, value, attn_mask=attn_mask, dropout_p=0.0, is_causal=False) 
         x = x.transpose(1, 2).reshape(batch_size, -1, attn.heads * head_dim)
         x = x.to(query.dtype)
 

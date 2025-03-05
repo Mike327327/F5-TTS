@@ -6,7 +6,7 @@ data/
 ckpts/
 wandb/
 results/
-
+checkpoints/
 
 
 # Byte-compiled / optimized / DLL files

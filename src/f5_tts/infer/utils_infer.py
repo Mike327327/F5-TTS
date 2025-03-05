@@ -93,6 +93,13 @@ def chunk_text(text, max_chars=135):
     if current_chunk:
         chunks.append(current_chunk.strip())
 
+    print(f"Total chunks: {len(chunks)}")
+    print(f"The chunks are: {chunks}")
+    
+    # chunk experiments
+    # chunks = []
+    # chunks = ["hello John ", "this is an example of a long sentence ",  "which will be split into multiple chunks ", "this is the last chunk "]
+    
     return chunks
 
 
@@ -382,11 +389,15 @@ def infer_process(
 ):
     # Split the input text into batches
     audio, sr = torchaudio.load(ref_audio)
+    # number of chars in the ref text / number of seconds in the ref audio * (25 - number of seconds in the ref audio)
     max_chars = int(len(ref_text.encode("utf-8")) / (audio.shape[-1] / sr) * (25 - audio.shape[-1] / sr))
+    print(f'max_chars: {max_chars}')
     gen_text_batches = chunk_text(gen_text, max_chars=max_chars)
     for i, gen_text in enumerate(gen_text_batches):
         print(f"gen_text {i}", gen_text)
     print("\n")
+    
+    print("device: ", device)
 
     show_info(f"Generating audio in {len(gen_text_batches)} batches...")
     return infer_batch_process(
@@ -428,6 +439,7 @@ def infer_batch_process(
     fix_duration=None,
     device=None,
 ):
+    print("device: ", device)
     audio, sr = ref_audio
     if audio.shape[0] > 1:
         audio = torch.mean(audio, dim=0, keepdim=True)

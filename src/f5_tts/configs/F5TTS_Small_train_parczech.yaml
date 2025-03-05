@@ -3,28 +3,28 @@ hydra:
     dir: ckpts/${model.name}_${model.mel_spec.mel_spec_type}_${model.tokenizer}_${datasets.name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
     
 datasets:
-  name: Emilia_ZH_EN  # dataset name
-  batch_size_per_gpu: 38400  # 8 GPUs, 8 * 38400 = 307200
+  name: ParCzech_2020_2021
+  batch_size_per_gpu: 7500  # 2 GPUs, 2 * 7500 = 15000
   batch_size_type: frame  # "frame" or "sample"
-  max_samples: 64  # max sequences per batch if use frame-wise batch_size. we set 32 for small models, 64 for base models
-  num_workers: 16
+  max_samples: 32  # max sequences per batch if use frame-wise batch_size. we set 32 for small models, 64 for base models
+  num_workers: 8
 
 optim:
-  epochs: 15
+  epochs: 1000
   learning_rate: 7.5e-5
-  num_warmup_updates: 20000  # warmup updates
-  grad_accumulation_steps: 1  # note: updates = steps / grad_accumulation_steps
+  num_warmup_updates: 5000  # warmup updates
+  grad_accumulation_steps: 8  # note: updates = steps / grad_accumulation_steps
   max_grad_norm: 1.0  # gradient clipping
   bnb_optimizer: False  # use bnb 8bit AdamW optimizer or not
 
 model:
-  name: F5TTS_Base  # model name
-  tokenizer: pinyin  # tokenizer type
+  name: F5TTS_Small
+  tokenizer: char
   tokenizer_path: None  # if tokenizer = 'custom', define the path to the tokenizer you want to use (should be vocab.txt)
   arch:
-    dim: 1024
-    depth: 22
-    heads: 16
+    dim: 768
+    depth: 18
+    heads: 12
     ff_mult: 2
     text_dim: 512
     conv_layers: 4
@@ -37,8 +37,8 @@ model:
     n_fft: 1024
     mel_spec_type: vocos  # 'vocos' or 'bigvgan'
   vocoder:
-    is_local: False  # use local offline ckpt or not
-    local_path: None  # local vocoder path
+    is_local: True  # use local offline ckpt or not
+    local_path: /mnt/matylda4/xluner01/F5-TTS/src/f5_tts/model/vocoder  # local vocoder path
 
 ckpts:
   logger: wandb  # wandb | tensorboard | None

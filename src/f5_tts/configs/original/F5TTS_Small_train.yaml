@@ -3,14 +3,14 @@ hydra:
     dir: ckpts/${model.name}_${model.mel_spec.mel_spec_type}_${model.tokenizer}_${datasets.name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
     
 datasets:
-  name: LibriTTS_100_360_500
+  name: Emilia_ZH_EN
   batch_size_per_gpu: 38400  # 8 GPUs, 8 * 38400 = 307200
   batch_size_type: frame  # "frame" or "sample"
   max_samples: 64  # max sequences per batch if use frame-wise batch_size. we set 32 for small models, 64 for base models
   num_workers: 16
 
 optim:
-  epochs: 100
+  epochs: 15
   learning_rate: 7.5e-5
   num_warmup_updates: 20000  # warmup updates
   grad_accumulation_steps: 1  # note: updates = steps / grad_accumulation_steps
@@ -19,7 +19,7 @@ optim:
 
 model:
   name: F5TTS_Small
-  tokenizer: char
+  tokenizer: pinyin
   tokenizer_path: None  # if tokenizer = 'custom', define the path to the tokenizer you want to use (should be vocab.txt)
   arch:
     dim: 768
