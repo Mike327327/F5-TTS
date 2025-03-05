@@ -27,12 +27,12 @@ def parse_args():
 
     # num_warmup_updates = 300 for 5000 sample about 10 hours
 
-    # change save_per_updates , last_per_updates change this value what you need  ,
+    # change save_per_updates , last_per_updates change this value what you need
 
     parser = argparse.ArgumentParser(description="Train CFM Model")
 
     parser.add_argument(
-        "--exp_name", type=str, default="F5TTS_Base", choices=["F5TTS_Base", "E2TTS_Base"], help="Experiment name"
+        "--exp_name", type=str, default="F5TTS_Base", choices=["F5TTS_Base", "E2TTS_Base", "F5TTS_Small"], help="Experiment name"
     )
     parser.add_argument("--dataset_name", type=str, default="Emilia_ZH_EN", help="Name of the dataset to use")
     parser.add_argument("--learning_rate", type=float, default=1e-5, help="Learning rate for training")
@@ -78,7 +78,6 @@ def parse_args():
 
     return parser.parse_args()
 
-
 # -------------------------- Training Settings -------------------------- #
 
 
@@ -86,10 +85,11 @@ def main():
     args = parse_args()
 
     checkpoint_path = str(files("f5_tts").joinpath(f"../../ckpts/{args.dataset_name}"))
+    
+    wandb_resume_id = None
 
     # Model parameters based on experiment name
     if args.exp_name == "F5TTS_Base":
-        wandb_resume_id = None
         model_cls = DiT
         model_cfg = dict(dim=1024, depth=22, heads=16, ff_mult=2, text_dim=512, conv_layers=4)
         if args.finetune:
@@ -98,7 +98,6 @@ def main():
             else:
                 ckpt_path = args.pretrain
     elif args.exp_name == "E2TTS_Base":
-        wandb_resume_id = None
         model_cls = UNetT
         model_cfg = dict(dim=1024, depth=24, heads=16, ff_mult=4)
         if args.finetune:
@@ -106,6 +105,15 @@ def main():
                 ckpt_path = str(cached_path("hf://SWivid/E2-TTS/E2TTS_Base/model_1200000.pt"))
             else:
                 ckpt_path = args.pretrain
+    elif args.exp_name == "F5TTS_Small":
+        model_cls = DiT
+        model_cfg = dict(dim=768, depth=18, heads=12, ff_mult=2, text_dim=512, conv_layers=4)
+        if args.finetune:
+            if args.pretrain is None:
+                ckpt_path = str(cached_path("hf://SWivid/F5-TTS/F5TTS_Base/model_1200000.pt"))
+            else:
+                ckpt_path = args.pretrain
+    
 
     if args.finetune:
         if not os.path.isdir(checkpoint_path):
@@ -117,7 +125,7 @@ def main():
         file_checkpoint = os.path.join(checkpoint_path, file_checkpoint)
         if not os.path.isfile(file_checkpoint):
             shutil.copy2(ckpt_path, file_checkpoint)
-            print("copy checkpoint for finetune")
+            print("Copy checkpoint for finetune")
 
     # Use the tokenizer and tokenizer_path provided in the command line arguments
     tokenizer = args.tokenizer
@@ -150,8 +158,8 @@ def main():
 
     trainer = Trainer(
         model,
-        args.epochs,
-        args.learning_rate,
+        epochs=args.epochs,
+        learning_rate=args.learning_rate,
         num_warmup_updates=args.num_warmup_updates,
         save_per_updates=args.save_per_updates,
         keep_last_n_checkpoints=args.keep_last_n_checkpoints,
@@ -162,12 +170,11 @@ def main():
         grad_accumulation_steps=args.grad_accumulation_steps,
         max_grad_norm=args.max_grad_norm,
         logger=args.logger,
-        wandb_project=args.dataset_name,
-        wandb_run_name=args.exp_name,
         wandb_resume_id=wandb_resume_id,
-        log_samples=args.log_samples,
         last_per_updates=args.last_per_updates,
+        log_samples=args.log_samples,
         bnb_optimizer=args.bnb_optimizer,
+        mel_spec_type=mel_spec_type
     )
 
     train_dataset = load_dataset(args.dataset_name, tokenizer, mel_spec_kwargs=mel_spec_kwargs)

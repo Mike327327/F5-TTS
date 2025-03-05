@@ -9,8 +9,8 @@ from importlib.resources import files
 from pathlib import Path
 from tqdm import tqdm
 import soundfile as sf
+import pandas as pd
 from datasets.arrow_writer import ArrowWriter
-
 
 def deal_with_audio_dir(audio_dir):
     sub_result, durations = [], []
@@ -18,16 +18,16 @@ def deal_with_audio_dir(audio_dir):
     audio_lists = list(audio_dir.rglob("*.wav"))
 
     for line in audio_lists:
-        text_path = line.with_suffix(".normalized.txt")
+        text_path = line.with_suffix(".prt")                                                    # transcript
         text = open(text_path, "r").read().strip()
-        duration = sf.info(line).duration
+        stats_tsv = Path(line).with_name("stats.tsv")
+        duration = (pd.read_csv(stats_tsv, sep="\t")['duration']).iloc[0]                     # duration
         if duration < 0.4 or duration > 30:
             continue
         sub_result.append({"audio_path": str(line), "text": text, "duration": duration})
         durations.append(duration)
         vocab_set.update(list(text))
     return sub_result, durations, vocab_set
-
 
 def main():
     result = []
@@ -74,19 +74,18 @@ def main():
     print(f"For {dataset_name}, vocab size is: {len(text_vocab_set)}")
     print(f"For {dataset_name}, total {sum(duration_list)/3600:.2f} hours")
 
-
 if __name__ == "__main__":
     max_workers = 36
 
     tokenizer = "char"  # "pinyin" | "char"
 
-    SUB_SET = ["train-clean-100", "train-clean-360", "train-other-500"]
-    dataset_dir = "/storage/brno2/home/michal327/LibriTTS/LibriTTS"
-    dataset_name = f"LibriTTS_{'_'.join(SUB_SET)}_{tokenizer}".replace("train-clean-", "").replace("train-other-", "")
+    SUB_SET = ["parczech-3.0-asr-train-2021"]
+    dataset_dir = "/storage/plzen1/home/michal327/ParCzech"
+    dataset_name = f"ParCzech_{'_'.join(SUB_SET)}_{tokenizer}".replace("parczech-3.0-asr-train-", "")
     save_dir = str(files("f5_tts").joinpath("../../")) + f"/data/{dataset_name}"
     print(f"\nPrepare for {dataset_name}, will save to {save_dir}\n")
     main()
 
-    # For LibriTTS_100_360_500_char, sample count: 354218
-    # For LibriTTS_100_360_500_char, vocab size is: 78
-    # For LibriTTS_100_360_500_char, total 554.09 hours
+    # For ParCzech_2021_char, sample count: ?
+    # For ParCzech_2021_char, vocab size is: ?
+    # For ParCzech_2021_char, total ? hours
