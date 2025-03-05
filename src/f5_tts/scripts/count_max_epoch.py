@@ -4,15 +4,15 @@ print("Adaptive batch size: using grouping batch sampler, frames_per_gpu fixed f
 print("  -> least padding, gather wavs with accumulated frames in a batch\n")
 
 # data
-total_hours = 554 # 95282
+total_hours = 95282
 mel_hop_length = 256
 mel_sampling_rate = 24000
 
 # target
-wanted_max_updates = 300000
+wanted_max_updates = 1000000
 
 # train params
-gpus = 2
+gpus = 8
 frames_per_gpu = 38400  # 8 * 38400 = 307200
 grad_accum = 1
 
