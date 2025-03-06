@@ -97,8 +97,11 @@ def chunk_text(text, max_chars=135):
     print(f"The chunks are: {chunks}")
     
     # chunk experiments
-    # chunks = []
     # chunks = ["hello John ", "this is an example of a long sentence ",  "which will be split into multiple chunks ", "this is the last chunk "]
+    # chunks = ['hello John', 'this is', 'an example', 'of a', 'long sentence', 'which will', 'be split', 'into multiple', 'chunks this', 'is the', 'last chunk']
+    # chunks = ['hello', 'John', 'this', 'is', 'an', 'example', 'of', 'a', 'long', 'sentence', 'which', 'will', 'be', 'split', 'into', 'multiple', 'chunks', 'this', 'is', 'the', 'last', 'chunk']
+    # chunks = [' hello ', ' John ', ' this ', ' is ', ' an ', ' example ', ' of ', ' a ', ' long ', ' sentence ', ' which ', ' will ', ' be ', ' split ', ' into ', ' multiple ', ' chunks ', ' this ', ' is ', ' the ', ' last ', ' chunk ']
+
     
     return chunks
 
