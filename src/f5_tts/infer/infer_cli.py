@@ -288,17 +288,18 @@ def main():
         voices = config["voices"]
         voices["main"] = main_voice
     for voice in voices:
-        print("Voice:", voice)
-        print("ref_audio ", voices[voice]["ref_audio"])
+        # print("Voice:", voice)
+        # print("ref_audio ", voices[voice]["ref_audio"])
         voices[voice]["ref_audio"], voices[voice]["ref_text"] = preprocess_ref_audio_text(
             voices[voice]["ref_audio"], voices[voice]["ref_text"]
         )
-        print("ref_audio_", voices[voice]["ref_audio"], "\n\n")
+        # print("ref_audio_", voices[voice]["ref_audio"], "\n\n")
 
     generated_audio_segments = []
     reg1 = r"(?=\[\w+\])"
     chunks = re.split(reg1, gen_text)
     reg2 = r"\[(\w+)\]"
+    print(f"Total chunks: {len(chunks)}")
     for text in chunks:
         if not text.strip():
             continue
@@ -316,7 +317,23 @@ def main():
         ref_text_ = voices[voice]["ref_text"]
         gen_text_ = text.strip()
         print(f"Voice: {voice}")
-        audio_segment, final_sample_rate, spectragram = infer_process(
+        
+        print("Arguments passed to infer_process:")
+        print(f"ref_audio_: {ref_audio_}")
+        print(f"ref_text_: {ref_text_}")
+        print(f"gen_text_: {gen_text_}")
+        print(f"ema_model: {ema_model}")
+        print(f"vocoder: {vocoder}")
+        print(f"mel_spec_type: {mel_spec_type}")
+        print(f"target_rms: {target_rms}")
+        print(f"cross_fade_duration: {cross_fade_duration}")
+        print(f"nfe_step: {nfe_step}")
+        print(f"cfg_strength: {cfg_strength}")
+        print(f"sway_sampling_coef: {sway_sampling_coef}")
+        print(f"speed: {speed}")
+        print(f"fix_duration: {fix_duration}")
+    
+        audio_segment, final_sample_rate, spectrogram = infer_process(
             ref_audio_,
             ref_text_,
             gen_text_,

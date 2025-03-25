@@ -68,7 +68,7 @@ class TextEmbedding(nn.Module):
 
             # convnextv2 blocks
             text = self.text_blocks(text)
-
+            
         return text
 
 

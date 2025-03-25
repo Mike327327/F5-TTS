@@ -349,7 +349,7 @@ class Attention(nn.Module):
             raise ImportError("Attention equires PyTorch 2.0, to use it, please upgrade PyTorch to 2.0.")
 
         self.processor = processor
-
+        
         self.dim = dim
         self.heads = heads
         self.inner_dim = dim_head * heads
@@ -409,7 +409,7 @@ class AttnProcessor:
         query = attn.to_q(x)
         key = attn.to_k(x)
         value = attn.to_v(x)
-
+        
         # apply rotary position embedding
         if rope is not None:
             freqs, xpos_scale = rope
@@ -510,7 +510,7 @@ class JointAttnProcessor:
             attn_mask = attn_mask.expand(batch_size, attn.heads, query.shape[-2], key.shape[-2])
         else:
             attn_mask = None
-
+            
         x = F.scaled_dot_product_attention(query, key, value, attn_mask=attn_mask, dropout_p=0.0, is_causal=False)
         x = x.transpose(1, 2).reshape(batch_size, -1, attn.heads * head_dim)
         x = x.to(query.dtype)

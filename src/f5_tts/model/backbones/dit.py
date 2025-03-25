@@ -33,7 +33,7 @@ class TextEmbedding(nn.Module):
     def __init__(self, text_num_embeds, text_dim, conv_layers=0, conv_mult=2):
         super().__init__()
         self.text_embed = nn.Embedding(text_num_embeds + 1, text_dim)  # use 0 as filler token
-
+        
         if conv_layers > 0:
             self.extra_modeling = True
             self.precompute_max_pos = 4096  # ~44s of 24khz audio
@@ -61,6 +61,7 @@ class TextEmbedding(nn.Module):
             batch_start = torch.zeros((batch,), dtype=torch.long)
             pos_idx = get_pos_embed_indices(batch_start, seq_len, max_pos=self.precompute_max_pos)
             text_pos_embed = self.freqs_cis[pos_idx]
+            
             text = text + text_pos_embed
 
             # convnextv2 blocks
@@ -81,7 +82,7 @@ class InputEmbedding(nn.Module):
     def forward(self, x: float["b n d"], cond: float["b n d"], text_embed: float["b n d"], drop_audio_cond=False):  # noqa: F722
         if drop_audio_cond:  # cfg for cond audio
             cond = torch.zeros_like(cond)
-
+            
         x = self.proj(torch.cat((x, cond, text_embed), dim=-1))
         x = self.conv_pos_embed(x) + x
         return x
@@ -140,7 +141,7 @@ class DiT(nn.Module):
 
     def forward(
         self,
-        x: float["b n d"],  # nosied input audio  # noqa: F722
+        x: float["b n d"],  # noised input audio  # noqa: F722
         cond: float["b n d"],  # masked cond audio  # noqa: F722
         text: int["b nt"],  # text  # noqa: F722
         time: float["b"] | float[""],  # time step  # noqa: F821 F722
