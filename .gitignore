@@ -7,7 +7,7 @@ ckpts/
 wandb/
 results/
 checkpoints/
-
+audio_playground/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

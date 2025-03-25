@@ -454,7 +454,8 @@ def infer_batch_process(
 
     if len(ref_text[-1].encode("utf-8")) == 1:
         ref_text = ref_text + " "
-    for i, gen_text in enumerate(progress.tqdm(gen_text_batches)):
+    # for i, gen_text in enumerate(progress.tqdm(gen_text_batches)): # Mike327327: silent tqdm
+    for i, gen_text in enumerate(gen_text_batches):
         # Prepare the text
         text_list = [ref_text + gen_text]
         final_text_list = convert_char_to_pinyin(text_list)
