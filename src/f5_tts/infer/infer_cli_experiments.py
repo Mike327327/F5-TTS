@@ -409,6 +409,7 @@ def experiment_per_chunk_gen_cond_with_silence(chunk_size=1, silence_len=100):
 # Generate audio per increasing chunk (word, multiple words), conditioned on the fixed reference, obtain only the new word using DTW and concatenate with the previous audio
 def experiment_dtw(window_size=1):
     # TODO make sliding window history, do not generate everything from the beginning
+    # TODO add some padding text after first 1-2 words to make the generated audio more natural
     experiment_id = f'experiment_dtw_window_size_{window_size}'
         
     ref_audio = ARGS.audio_ref_file
@@ -474,7 +475,7 @@ def experiment_dtw(window_size=1):
                 new_samples = wav_curr[overlap_len:] if overlap_len < len(wav_curr) else np.array([], dtype=np.float32)
 
                 # Save the new clipped chunk (optional for debugging)
-                sf.write(Path(ARGS.audio_gen_output_folder, experiment_id, f'check_output_chunk_{i}_new.wav'), new_samples, samplerate=sr)
+                # sf.write(Path(ARGS.audio_gen_output_folder, experiment_id, f'check_output_chunk_{i}_new.wav'), new_samples, samplerate=sr)
                 
                 # Append the new chunk to final audio
                 final_audio = np.concatenate((final_audio, new_samples))
@@ -487,6 +488,9 @@ def experiment_dtw(window_size=1):
         # Save final concatenated audio
         sf.write(Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav'), final_audio, samplerate=24000)
         print_verbose(f"Audio saved as {Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav')}")
+        # Delete chunk audio files
+        for i in range(len(gen_text)):
+            os.remove(Path(ARGS.audio_gen_output_folder, experiment_id, f'output_chunk_{i}.wav'))
 
 if __name__ == "__main__":   
     ARGS = parse_args()
