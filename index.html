@@ -64,10 +64,10 @@
         </thead>
         <tbody>
           <tr>
-            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/reference/ref_audio_en_david_jaquay.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/reference/ref_audio_en_kirsten_ferreri.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/reference/ref_audio_en_donald_trump.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/reference/ref_audio_en_kamala_harris.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/reference/ref_audio_en_david_jaquay.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/reference/ref_audio_en_kirsten_ferreri.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/reference/ref_audio_en_donald_trump.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/reference/ref_audio_en_kamala_harris.wav" type="audio/wav"></audio></td>
           </tr>
         </tbody>
       </table>
@@ -348,8 +348,317 @@
 
     <hr style="border: 1px solid #ccc; width: 50%;">
 
+    <h2>Additional Experiments</h2>
+    <p class="par">
+      As a reference audio, same sentence of a seen male speaker was used.
+    </p>
+
+    <h3>Specific word</h3>
+    <p class="par">
+      This experiment explores the model's ability to generate word <i>jednoduchá</i> with different inference settings.
+      Overview of details for each experiment is provided in the table below.
+        <table border="1" cellspacing="0" cellpadding="6">
+          <thead>
+            <tr>
+              <th style="text-align: center;">Experiment</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: center;">1</td>
+              <td>Default inference settings, word <i>jednoduchá</i> without any other modifications.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">2</td>
+              <td>Default inference settings, word <i>jednoduchá.</i> with a dot at the end.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">3</td>
+              <td>Default inference settings, word <i>jednoduchá .</i> with a space and dot at the end.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">4</td>
+              <td>Default inference settings, word <i>jednoduchá ..</i> with space and 2 dots at the end.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">5</td>
+              <td>Default inference settings, word <i>jednoduchá,</i> with a comma.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">6</td>
+              <td>Default inference settings, word <i>jednoduchá, </i> with a comma and space after it.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">7</td>
+              <td>Flag speed=0.9, word <i>jednoduchá .</i> with a space and dot at the end.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">8</td>
+              <td>Flag nfe_step=16 (default is 32), word <i>jednoduchá .</i> with a space and dot at the end.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">9</td>
+              <td>Flag cfg_strength=4 (default is 2), word <i>jednoduchá .</i> with a space and dot at the end.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">10</td>
+              <td>Flag fix_duration=8.3 (given 8-second long reference), word <i>jednoduchá .</i> with a space and dot at the end.</td>
+            </tr>
+          </tbody>
+        </table>
+    </p>
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th>Exp. 1</th>
+            <th>Exp. 2</th>
+            <th>Exp. 3</th>
+            <th>Exp. 4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/word_jednoducha_experiments/001_without_dot.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/word_jednoducha_experiments/002_with_dot.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/word_jednoducha_experiments/003_with_space_and_dot_at_the_end.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/word_jednoducha_experiments/004_with_two_dots_at_the_end.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th>Exp. 5</th>
+            <th>Exp. 6</th>
+            <th>Exp. 7</th>
+            <th>Exp. 8</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/word_jednoducha_experiments/005_with_comma_at_the_end.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/word_jednoducha_experiments/006_with_comma_and_space_after_it.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/word_jednoducha_experiments/007_with_dot_speed_0.9.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/word_jednoducha_experiments/008_with_dot_nfe_step_16.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th>Exp. 9</th>
+            <th>Exp. 10</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/word_jednoducha_experiments/009_with_dot_cfg_strength_4.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/word_jednoducha_experiments/010_with_dot_fix_duration_8.3.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="par">
+      Based on these experiments, it can be concluded that the model is very sensitive to the punctuation marks and spaces at the end of the word. 
+      To introduce a pause, it is a good practice to add a space and a dot at the end of the word.
+    </p>
+
+    <h3>Specific sentence</h3>
+    <p class="par">
+      This experiment explores the model's ability to generate sentence <i>Takže my samozřejmě čelíme vždycky kritice, ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce.</i> 
+      with different inference settings. Reference sentence is almost identical (only word <i>takže</i> is added).
+      Duration of the reference audio is 8.5 seconds.
+      Overview of details for each experiment is provided in the table below.
+        <table border="1" cellspacing="0" cellpadding="6">
+          <thead>
+            <tr>
+              <th style="text-align: center;">Experiment</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: center;">1</td>
+              <td>Default inference settings, sentence provided without any other modifications.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">2</td>
+              <td>Flag speed=0.9, sentence provided without any other modifications.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">3</td>
+              <td>Flag fix_duration=6, sentence provided without any other modifications.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">4</td>
+              <td>Flag fix_duration=30, sentence provided without any other modifications.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">5</td>
+              <td>Flag fix_duration=15, sentence provided without any other modifications.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">6</td>
+              <td>Flag fix_duration=10, sentence provided without any other modifications.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">7</td>
+              <td>Flag fix_duration=10, sentence was cut, <i>Takže my samozřejmě .</i> was the text to generate.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">8</td>
+              <td>Flag fix_duration=5, sentence was cut, <i>Takže .</i> was the text to generate.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">9</td>
+              <td>Flag fix_duration=5, sentence was cut, <i>Takže .</i> was the text to generate.<br> This only compares different model's outputs for identical inputs.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">10</td>
+              <td>Flag fix_duration=10, sentence was cut, <i>Takže .</i> was the text to generate.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">11</td>
+              <td>Flag fix_duration=8, sentence was cut, <i>Takže .</i> was the text to generate.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">12</td>
+              <td>Flag fix_duration=9, sentence was cut, <i>Takže .</i> was the text to generate.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">13</td>
+              <td>Flag fix_duration=7, sentence was cut, <i>Takže .</i> was the text to generate.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">14</td>
+              <td>Flag fix_duration=8.5, sentence was cut, <i>Takže .</i> was the text to generate.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">15</td>
+              <td>Default inference settings, sentence was cut, <i>Takže .</i> was the text to generate.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">16</td>
+              <td>Flag fix_duration=8.75, sentence was cut, <i>Takže .</i> was the text to generate.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">17</td>
+              <td>Flag fix_duration=7.5, sentence was cut, <i>Takže .</i> was the text to generate.</td>
+            </tr>
+          </tbody>
+        </table>
+    </p>
+
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th>Exp. 1</th>
+            <th>Exp. 2</th>
+            <th>Exp. 3</th>
+            <th>Exp. 4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_001.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_002.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_003.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_004.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th>Exp. 5</th>
+            <th>Exp. 6</th>
+            <th>Exp. 7</th>
+            <th>Exp. 8</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_005.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_006.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_007.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_008.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th>Exp. 9</th>
+            <th>Exp. 10</th>
+            <th>Exp. 11</th>
+            <th>Exp. 12</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_009.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_010.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_011.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_012.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th>Exp. 13</th>
+            <th>Exp. 14</th>
+            <th>Exp. 15</th>
+            <th>Exp. 16</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_013.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_014.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_015.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_016.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th>Exp. 17</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_017.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <footer>
-      <p>&copy; 2025 Realtime TTS</p>
+      <p>&copy; 2025 Realtime F5-TTS</p>
     </footer>
     
   </body>

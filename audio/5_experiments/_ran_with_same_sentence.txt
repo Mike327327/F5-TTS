@@ -1,0 +1,255 @@
+exp_cz_XXX
+001
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_001.wav" \
+--load_vocoder_from_local \
+--vocoder_name "vocos"
+
+002
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_002.wav" \
+--load_vocoder_from_local \
+--speed 0.9 \
+--vocoder_name "vocos"
+
+003
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_003.wav" \
+--load_vocoder_from_local \
+--fix_duration 6.0 \
+--vocoder_name "vocos"
+
+004
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_004.wav" \
+--load_vocoder_from_local \
+--fix_duration 30.0 \
+--vocoder_name "vocos"
+
+005
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_005.wav" \
+--load_vocoder_from_local \
+--fix_duration 15.0 \
+--vocoder_name "vocos"
+
+006
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_006.wav" \
+--load_vocoder_from_local \
+--fix_duration 10.0 \
+--vocoder_name "vocos"
+
+007
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže my samozřejmě ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_007.wav" \
+--load_vocoder_from_local \
+--fix_duration 10.0 \
+--vocoder_name "vocos"
+
+008
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_008.wav" \
+--load_vocoder_from_local \
+--fix_duration 5.0 \
+--vocoder_name "vocos"
+
+009
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_009.wav" \
+--load_vocoder_from_local \
+--fix_duration 5.0 \
+--vocoder_name "vocos"
+
+010
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_010.wav" \
+--load_vocoder_from_local \
+--fix_duration 10.0 \
+--vocoder_name "vocos"
+
+011
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_011.wav" \
+--load_vocoder_from_local \
+--fix_duration 8.0 \
+--vocoder_name "vocos"
+
+duration ref je 8.5 s
+012
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_012.wav" \
+--load_vocoder_from_local \
+--fix_duration 9.0 \
+--vocoder_name "vocos"
+
+013
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_013.wav" \
+--load_vocoder_from_local \
+--fix_duration 7.0 \
+--vocoder_name "vocos"
+
+014
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_014.wav" \
+--load_vocoder_from_local \
+--fix_duration 8.5 \
+--vocoder_name "vocos"
+
+015
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_015.wav" \
+--load_vocoder_from_local \
+--vocoder_name "vocos"
+
+016
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_016.wav" \
+--load_vocoder_from_local \
+--fix_duration 8.75 \
+--vocoder_name "vocos"
+
+cast, kde konci rec, je 7.5, pak je ticho - zkusme dat duration tak
+017
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "Takže ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_017.wav" \
+--load_vocoder_from_local \
+--fix_duration 7.5 \
+--vocoder_name "vocos"

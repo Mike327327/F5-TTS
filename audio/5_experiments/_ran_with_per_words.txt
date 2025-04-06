@@ -1,0 +1,14 @@
+exp_cz_per_word_XXX
+f5-tts_infer-cli \
+--model "F5-TTS" \
+--ckpt_file "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt" \
+--model_cfg "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml" \
+--vocab_file "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt" \
+--ref_audio "/mnt/matylda4/xluner01/F5-TTS/audio_playground/cz/reference/ref_audio_cz_silence_2.wav" \
+--ref_text "Takže my samozřejmě čelíme vždycky kritice , ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce ." \
+--gen_text "jednoduchá ." \
+--output_dir "/mnt/matylda4/xluner01/F5-TTS/audio_playground/experiments/cz" \
+--output_file "exp_cz_per_word_fix_jednoducha_8_3.wav" \
+--load_vocoder_from_local \
+--fix_duration 8.3 \
+--vocoder_name "vocos"
