@@ -1,0 +1,91 @@
+* {
+  box-sizing: border-box;
+}
+
+.par {
+  justify-content: center;
+  align-items: center;
+  max-width: 900px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #181818;
+  color: #fff;
+  font-family: Helvetica, sans-serif;
+}
+
+header {
+  display: flex;
+  align-items: center;
+}
+
+header h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.par {
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+h1, h2, h3 {
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+h1 {
+  font-size: 36px;
+}
+
+h2 {
+  margin-top: 20px;
+  font-size: 29px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+.audio-samples table {
+  margin: 0 auto;
+}
+
+footer {
+  background-color: #323232;
+  text-align: center;
+  padding: 20px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+
+@media only screen and (max-width: 980px) {
+  .audio-samples table thead {
+    display: none;
+  }
+  
+  .audio-samples table tbody tr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .audio-samples table tbody td {
+    padding: 10px 0;
+  }
+  
+  .audio-samples table tbody td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center;
+  }
+}
