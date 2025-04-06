@@ -64,10 +64,10 @@
         </thead>
         <tbody>
           <tr>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/reference/ref_audio_en_david_jaquay.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/reference/ref_audio_en_kirsten_ferreri.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/reference/ref_audio_en_donald_trump.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/reference/ref_audio_en_kamala_harris.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/reference/ref_audio_en_david_jaquay.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/reference/ref_audio_en_kirsten_ferreri.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/reference/ref_audio_en_donald_trump.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/reference/ref_audio_en_kamala_harris.wav" type="audio/wav"></audio></td>
           </tr>
         </tbody>
       </table>
@@ -108,14 +108,14 @@
 
     <h3>Generated audio files</h3>
     <p class="par">
-      <b>Reference sentence</b>: <i>His days and works and thoughts could make no atonement for him, the fountains of sanctifying grace having ceased to refresh his soul.</i>
-      <br>
       The results show that the model can generate full sentences with good quality, both for seen and unseen speakers. 
       Generating by individual words is very poor, mainly because the model struggles to generate short words properly. 
       Conditioning the generation on the previously generated recording didn’t help much either, because the model has trouble with shorter segments.
       Once one word is generated incorrectly, the error spreads. 
       When the model has a larger context (two words), it performs much better. 
       Finally, the most hardware-intensive option, using DTW, currently works the best.
+      <br><br>
+      <b>Reference sentence</b>: <i>His days and works and thoughts could make no atonement for him, the fountains of sanctifying grace having ceased to refresh his soul.</i>
     </p>
     <p class="par">
       <b>Seen M</b>
@@ -133,11 +133,11 @@
         </thead>
         <tbody>
           <tr>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_male/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_male/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_male/experiment_per_chunk_size_1_gen_cond.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_male/experiment_per_chunk_size_2_gen_cond_with_silence_300_ms.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_male/experiment_dtw_window_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_male/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_male/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_male/experiment_per_chunk_size_1_gen_cond.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_male/experiment_per_chunk_size_2_gen_cond_with_silence_300_ms.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_male/experiment_dtw_window_size_1.wav" type="audio/wav"></audio></td>
           </tr>
         </tbody>
       </table>
@@ -150,11 +150,11 @@
       <table style="margin: 0 auto;">
         <tbody>
           <tr>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_female/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_female/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_female/experiment_per_chunk_size_1_gen_cond.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_female/experiment_per_chunk_size_2_gen_cond_with_silence_300_ms.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_female/experiment_dtw_window_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_female/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_female/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_female/experiment_per_chunk_size_1_gen_cond.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_female/experiment_per_chunk_size_2_gen_cond_with_silence_300_ms.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_female/experiment_dtw_window_size_1.wav" type="audio/wav"></audio></td>
           </tr>
         </tbody>
       </table>
@@ -167,11 +167,11 @@
       <table style="margin: 0 auto;">
         <tbody>
           <tr>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_male/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_male/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_male/experiment_per_chunk_size_1_gen_cond.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_male/experiment_per_chunk_size_2_gen_cond_with_silence_300_ms.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_male/experiment_dtw_window_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_male/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_male/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_male/experiment_per_chunk_size_1_gen_cond.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_male/experiment_per_chunk_size_2_gen_cond_with_silence_300_ms.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_male/experiment_dtw_window_size_1.wav" type="audio/wav"></audio></td>
           </tr>
         </tbody>
       </table>
@@ -184,11 +184,163 @@
       <table style="margin: 0 auto;">
         <tbody>
           <tr>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_female/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_female/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_female/experiment_per_chunk_size_1_gen_cond.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_female/experiment_per_chunk_size_2_gen_cond_with_silence_300_ms.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_female/experiment_dtw_window_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_female/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_female/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_female/experiment_per_chunk_size_1_gen_cond.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_female/experiment_per_chunk_size_2_gen_cond_with_silence_300_ms.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_female/experiment_dtw_window_size_1.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="par">
+      Additional model with causal mask used in the attention mechanism was trained on the same data. 
+      Unfortunately, the results did not improve, thus, the examples are not presented here either.
+    </p>
+
+    <hr style="border: 1px solid #ccc; width: 50%;">
+
+    <h2>Czech model</h2>
+    <p class="par">
+      Sample audio files generated manually on a same sentence after training the model. 
+      Details about training can be found in <a href="audio/3_czech_model/F5TTS_Small_train.yaml" download>config</a>.
+      <br>
+      <!-- <b>Reference sentence</b>: <i>My samozřejmě čelíme vždycky kritice, ale my zkrátka nejsme schopni to zvládnout sami bez spolupráce.</i> -->
+    </p>
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+      <thead>
+          <tr>
+          <th>Original</th>
+          <th>100k</th>
+          <th>1M</th>
+          <th>3M</th>
+          <th>7M</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+          <td><audio controls style="width: 250px;"><source class="player" src="audio/3_czech_model/ref_audio_cz_babis.wav" type="audio/wav"></audio></td>
+          <td><audio controls style="width: 250px;"><source class="player" src="audio/3_czech_model/update_100000_gen.wav" type="audio/wav"></audio></td>
+          <td><audio controls style="width: 250px;"><source src="audio/3_czech_model/update_1000000_gen.wav" type="audio/wav"></audio></td>
+          <td><audio controls style="width: 250px;"><source src="audio/3_czech_model/update_3000000_gen.wav" type="audio/wav"></audio></td>
+          <td><audio controls style="width: 250px;"><source src="audio/3_czech_model/update_7000000_gen.wav" type="audio/wav"></audio></td>
+          </tr>
+      </tbody>
+      </table>
+    </div>
+
+    <h2>Experiments</h2>
+    <h3>Reference audio files</h3>
+    <p class="par">
+      In total 4 speakers were used in the experiments - 2 seen and 2 unseen. 
+      Each recording is approximately of the same length with silence at the end.
+      All recordings are sampled at 24 kHz and their loudness is normalized.
+    </p>
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th>Seen M</th>
+            <th>Seen F</th>
+            <th>Unseen M</th>
+            <th>Unseen F</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/reference/ref_audio_cz_babis.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/reference/ref_audio_cz_schillerova.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/reference/ref_audio_cz_pavel.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/reference/ref_audio_cz_nerudova.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="par">
+      Experiments were identical to the ones conducted on the English model.
+    </p>
+
+    <h3>Generated audio files</h3>
+    <p class="par">
+      The interpretation of the results is similar to the English model.
+      <br><br>
+      <b>Reference sentence</b>: <i>Já jsem ty otázky pokládal, protože tady do jisté míry měníte koncepci, která byla.</i>
+    </p>
+    <p class="par">
+      <b>Seen M</b>
+    </p>
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th>Exp. 1</th>
+            <th>Exp. 2</th>
+            <th>Exp. 3</th>
+            <th>Exp. 4</th>
+            <th>Exp. 5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_male/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_male/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_male/experiment_per_chunk_size_1_gen_cond.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_male/experiment_per_chunk_size_2_gen_cond_with_silence_300_ms.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_male/experiment_dtw_window_size_1.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="par">
+      <b>Seen F</b>
+    </p>
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_female/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_female/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_female/experiment_per_chunk_size_1_gen_cond.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_female/experiment_per_chunk_size_2_gen_cond_with_silence_300_ms.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/seen_female/experiment_dtw_window_size_1.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="par">
+      <b>Unseen M</b>
+    </p>
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_male/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_male/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_male/experiment_per_chunk_size_1_gen_cond.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_male/experiment_per_chunk_size_2_gen_cond_with_silence_300_ms.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_male/experiment_dtw_window_size_1.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="par">
+      <b>Unseen F</b>
+    </p>
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_female/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_female/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_female/experiment_per_chunk_size_1_gen_cond.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_female/experiment_per_chunk_size_2_gen_cond_with_silence_300_ms.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/4_experiments/unseen_female/experiment_dtw_window_size_1.wav" type="audio/wav"></audio></td>
           </tr>
         </tbody>
       </table>
