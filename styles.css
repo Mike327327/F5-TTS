@@ -18,6 +18,10 @@ body {
   font-family: Helvetica, sans-serif;
 }
 
+a {
+  color: white;
+}
+
 header {
   display: flex;
   align-items: center;

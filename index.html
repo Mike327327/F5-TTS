@@ -2,199 +2,202 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>TTS Personalization</title>
+    <title>Realtime F5-TTS</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-      <h1>TTS Personalization</h1>
-      <p class="par">
-        This page shows the results of the Czech TTS models.
-        First, results of base models are presented along with examples.
-        This is followed by example of non-fine-tuned and fine-tuned samples (male and female speakers).
-        Each section is briefly introduced and the results are commented.
-      </p>
-        
-      <h2>Base models</h2>
-      <h3>1M and 200k</h3>
-      <p class="par">
-        The 1M model is capable of generating shorter samples conditioned on d-vectors in a decent quality (samples B1 and B2).
-        However, longer inputs caused issues and speech was unintelligible (sample B3). This issue was solved by segmenting the input text based on commas (sample B4).
-        The 200k model performed worse than the 1M model. Segmenting the input text sometimes did not help and speech was not intelligible, as can be heard in sample B5.
-      </p>
-      <div class="audio-samples">
-        <table style="margin: 0 auto;">
-        <thead>
-            <tr>
-            <th>Original Audio (B1)</th>
-            <th>Inferred Audio (B2)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-            <td><audio controls style="width: 250px;"><source class="player" src="audio/1m_orig.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/1m_infer.wav" type="audio/wav"></audio></td>
-            </tr>
-        </tbody>
-        </table>
-       
-        <table style="margin: 0 auto;">
-        <thead>
-            <tr>
-            <th>1M (not segmented) (B3)</th>
-            <th>1M (segmented) (B4)</th>
-            <th>200k (segmented) (B5)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-            <td><audio controls style="width: 250px;"><source src="audio/1m_unscaled.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/1m_scaled.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/200k_unscaled.wav" type="audio/wav"></audio></td>
-            </tr>
-        </tbody>
-        </table>
-      </div>
-      
-      <h2>Male personalization</h2>
-      <h3>1M, 1M(P), and 200k(P20)</h3>
-      <p class="par">
-        The generated examples below are compared to the ground truth (first column). 
-        The following three samples on each line were generated using the 1M, 1M(P), and 200k(P20) models. 
-        Especially interesting is the comparison of the 1M(P) and 200k(P20) models 
-        &mdash; the 1M(P) was fine-tuned for 70k steps using 70 minutes of the target speaker training samples, whereas the 200k(P20) model used only 10 minutes and ran for 20k training steps. 
-        Both 1M(P) and 200k(P) produced almost identical results, therefore, comparing them to each other is fair.
-      </p>
-      <div class="audio-samples">
-      <table style="margin: 0 auto;">
-        <thead>
-          <tr>
-            <th>Original</th>
-            <th>Unseen<br><span style="font-weight: normal;">1M</span></th>
-            <th>Fine-tuned<br><span style="font-weight: normal;">1M(P)</span></th>
-            <th>Fine-tuned<br><span style="font-weight: normal;">200k(P20)</span></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_139_14.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_139_14_unseen.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_139_14_seen.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_139_14_p20.wav" type="audio/wav"></audio></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table style="margin: 0 auto;">
-        <tbody>
-          <tr>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_129_24.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_129_24_unseen.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_129_24_seen.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_129_24_p20.wav" type="audio/wav"></audio></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table style="margin: 0 auto;">
-        <tbody>
-          <tr>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_129_4.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_129_4_unseen.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_129_4_seen.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_129_4_p20.wav" type="audio/wav"></audio></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table style="margin: 0 auto;">
-        <tbody>
-          <tr>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_124_16.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_124_16_unseen.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_124_16_seen.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_124_16_p20.wav" type="audio/wav"></audio></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table style="margin: 0 auto;">
-        <tbody>
-          <tr>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_124_10.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_124_10_unseen.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_124_10_seen.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/pavel/PAVEL_INTERVIEW-4_124_10_p20.wav" type="audio/wav"></audio></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h2>Female personalization</h2>
-    <h3>200k(F) and 200k(N+F)</h3>
+    <h1>Realtime F5-TTS</h1>
     <p class="par">
-    The generated examples below are compared to the ground truth (first column). 
-    The following two samples on each line were generated using the 200k(F) and 200k(N+F) models.
+      This page shows the results of experiments with F5-TTS models - one trained using English data, the second one using the Czech ones.
+      For the English model, first, the sample files generated during training are presented.
+      Next, the results of the experiments are shown. After providing reference audio files, the specifics of the experiments are described. 
+      Experiments were conducted on 4 speakers - 2 seen and 2 unseen.
+      <br>
+      The second part of the page is dedicated to the Czech model. The same structure is used as in the first part.
+      In addition, more experiments were conducted on the Czech model, which are described in detail in the corresponding section.
+    </p>
+
+    <hr style="border: 1px solid #ccc; width: 50%;">
+      
+    <h2>English model</h2>
+    <p class="par">
+      Sample audio files generated while training the model. 
+      Details about training can be found in <a href="audio/1_english_model/F5TTS_Small_train.yaml" download>config</a>.
     </p>
     <div class="audio-samples">
       <table style="margin: 0 auto;">
       <thead>
-        <tr>
-          <th>Original</th>
-          <th>Unseen<br><span style="font-weight: normal;">200k(F)</span></th>
-          <th>Fine-tuned<br><span style="font-weight: normal;">200k(N+F)</span></th>
-        </tr>
+          <tr>
+          <th>100k</th>
+          <th>300k</th>
+          <th>1M</th>
+          <th>1.6M</th>
+          </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><audio controls style="width: 250px;"><source src="audio/nerudova/DANUSE_INTERVIEW-3_135_0.wav" type="audio/wav"></audio></td>
-          <td><audio controls style="width: 250px;"><source src="audio/nerudova/DANUSE_INTERVIEW-3_135_0_unseen.wav" type="audio/wav"></audio></td>
-          <td><audio controls style="width: 250px;"><source src="audio/nerudova/DANUSE_INTERVIEW-3_135_0_seen.wav" type="audio/wav"></audio></td>
-        </tr>
+          <tr>
+          <td><audio controls style="width: 250px;"><source class="player" src="audio/1_english_model/update_100000_gen.wav" type="audio/wav"></audio></td>
+          <td><audio controls style="width: 250px;"><source src="audio/1_english_model/update_300000_gen.wav" type="audio/wav"></audio></td>
+          <td><audio controls style="width: 250px;"><source src="audio/1_english_model/update_1000000_gen.wav" type="audio/wav"></audio></td>
+          <td><audio controls style="width: 250px;"><source src="audio/1_english_model/update_1600000_gen.wav" type="audio/wav"></audio></td>
+          </tr>
       </tbody>
       </table>
-
+    </div>
+      
+    <h2>Experiments</h2>
+    <h3>Reference audio files</h3>
+    <p class="par">
+      In total 4 speakers were used in the experiments - 2 seen and 2 unseen. 
+      Each recording is approximately of the same length with silence at the end.
+      All recordings are sampled at 24 kHz and their loudness is normalized.
+    </p>
+    <div class="audio-samples">
       <table style="margin: 0 auto;">
-        <tbody>
+        <thead>
           <tr>
-            <td><audio controls style="width: 250px;"><source src="audio/nerudova/DANUSE_INTERVIEW-4_101_11.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/nerudova/DANUSE_INTERVIEW-4_101_11_unseen.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/nerudova/DANUSE_INTERVIEW-4_101_11_seen.wav" type="audio/wav"></audio></td>
+            <th>Seen M</th>
+            <th>Seen F</th>
+            <th>Unseen M</th>
+            <th>Unseen F</th>
           </tr>
-        </tbody>
-      </table>
-
-      <table style="margin: 0 auto;">
+        </thead>
         <tbody>
           <tr>
-            <td><audio controls style="width: 250px;"><source src="audio/nerudova/DANUSE_INTERVIEW-4_164_9.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/nerudova/DANUSE_INTERVIEW-4_164_9_unseen.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/nerudova/DANUSE_INTERVIEW-4_164_9_seen.wav" type="audio/wav"></audio></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table style="margin: 0 auto;">
-        <tbody>
-          <tr>
-            <td><audio controls style="width: 250px;"><source src="audio/nerudova/DANUSE_INTERVIEW-4_171_0.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/nerudova/DANUSE_INTERVIEW-4_171_0_unseen.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/nerudova/DANUSE_INTERVIEW-4_171_0_seen.wav" type="audio/wav"></audio></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table style="margin: 0 auto;">
-        <tbody>
-          <tr>
-            <td><audio controls style="width: 250px;"><source src="audio/nerudova/DANUSE_INTERVIEW-4_197_0.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/nerudova/DANUSE_INTERVIEW-4_197_0_unseen.wav" type="audio/wav"></audio></td>
-            <td><audio controls style="width: 250px;"><source src="audio/nerudova/DANUSE_INTERVIEW-4_197_0_seen.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/reference/ref_audio_en_david_jaquay.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/reference/ref_audio_en_kirsten_ferreri.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/reference/ref_audio_en_donald_trump.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/reference/ref_audio_en_kamala_harris.wav" type="audio/wav"></audio></td>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <p class="par">
+      <table border="1" cellspacing="0" cellpadding="6">
+        <thead>
+          <tr>
+            <th style="text-align: center;">Experiment</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center;">1</td>
+            <td>No modifications, sentence-by-sentence generation.</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">2</td>
+            <td>Word-by-word generation, recordings concatenated after generating all words.</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">3</td>
+            <td>Word-by-word generation, recordings concatenated after generating all words.<br>Additionally, the generation of a new word is conditioned on the previous word (inserted as reference).</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">4</td>
+            <td>Two-word generation with added silence (100 ms) at the end of the generated recording.<br>Recordings concatenated after generating all words.</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">5</td>
+            <td>Using Dynamic Time Warping (DTW): gradually inserting larger and larger segments of text, <br>then trimming the generated recording and selecting only the last word.</td>
+          </tr>
+        </tbody>
+      </table>
+    </p>
+
+    <h3>Generated audio files</h3>
+    <p class="par">
+      <b>Reference sentence</b>: <i>His days and works and thoughts could make no atonement for him, the fountains of sanctifying grace having ceased to refresh his soul.</i>
+      <br>
+      The results show that the model can generate full sentences with good quality, both for seen and unseen speakers. 
+      Generating by individual words is very poor, mainly because the model struggles to generate short words properly. 
+      Conditioning the generation on the previously generated recording didn’t help much either, because the model has trouble with shorter segments.
+      Once one word is generated incorrectly, the error spreads. 
+      When the model has a larger context (two words), it performs much better. 
+      Finally, the most hardware-intensive option, using DTW, currently works the best.
+    </p>
+    <p class="par">
+      <b>Seen M</b>
+    </p>
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th>Exp. 1</th>
+            <th>Exp. 2</th>
+            <th>Exp. 3</th>
+            <th>Exp. 4</th>
+            <th>Exp. 5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_male/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_male/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_male/experiment_per_chunk_size_1_gen_cond.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_male/experiment_per_chunk_size_2_gen_cond_with_silence_300_ms.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_male/experiment_dtw_window_size_1.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="par">
+      <b>Seen F</b>
+    </p>
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_female/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_female/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_female/experiment_per_chunk_size_1_gen_cond.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_female/experiment_per_chunk_size_2_gen_cond_with_silence_300_ms.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/seen_female/experiment_dtw_window_size_1.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="par">
+      <b>Unseen M</b>
+    </p>
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_male/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_male/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_male/experiment_per_chunk_size_1_gen_cond.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_male/experiment_per_chunk_size_2_gen_cond_with_silence_300_ms.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_male/experiment_dtw_window_size_1.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="par">
+      <b>Unseen F</b>
+    </p>
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_female/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_female/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_female/experiment_per_chunk_size_1_gen_cond.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_female/experiment_per_chunk_size_2_gen_cond_with_silence_300_ms.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/2_experiments/unseen_female/experiment_dtw_window_size_1.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr style="border: 1px solid #ccc; width: 50%;">
+
     <footer>
-      <p>&copy; 2023 TTS Personalization</p>
+      <p>&copy; 2025 Realtime TTS</p>
     </footer>
     
   </body>
