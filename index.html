@@ -17,7 +17,7 @@
       In addition, more experiments were conducted on the Czech model, which are described in detail in the corresponding section.
     </p>
 
-    <hr style="border: 1px solid #ccc; width: 50%;">
+    <hr style="border: 1px solid #ccc; width: 100%;">
       
     <h2>English model</h2>
     <p class="par">
@@ -199,7 +199,7 @@
       Unfortunately, the results did not improve, thus, the examples are not presented here either.
     </p>
 
-    <hr style="border: 1px solid #ccc; width: 50%;">
+    <hr style="border: 1px solid #ccc; width: 100%;">
 
     <h2>Czech model</h2>
     <p class="par">
@@ -353,6 +353,8 @@
       As a reference audio, same sentence of a seen male speaker was used.
     </p>
 
+    <hr style="border: 1px solid #ccc; width: 30%;">
+    
     <h3>Specific word</h3>
     <p class="par">
       This experiment explores the model's ability to generate word <i>jednoduchá</i> with different inference settings.
@@ -471,6 +473,8 @@
       Based on these experiments, it can be concluded that the model is very sensitive to the punctuation marks and spaces at the end of the word. 
       To introduce a pause, it is a good practice to add a space and a dot at the end of the word.
     </p>
+
+    <hr style="border: 1px solid #ccc; width: 30%;">
 
     <h3>Specific sentence</h3>
     <p class="par">
@@ -656,6 +660,94 @@
         </tbody>
       </table>
     </div>
+
+    <hr style="border: 1px solid #ccc; width: 30%;">
+
+    <h3>Word-by-word generation</h3>
+    <p class="par">
+      This experiment explores the model's ability to generate words from sentence <i>Toto je jednoduchá česká věta.</i> 
+      with various inference settings per word. Reference sentence is still the same and its duration is 8.5 seconds.
+      Overview of details for each experiment is provided in the table below.
+        <table border="1" cellspacing="0" cellpadding="6">
+          <thead>
+            <tr>
+              <th style="text-align: center;">Experiment</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: center;">1</td>
+              <td>Flag fix_duration=8, <i>Toto .</i> was the text to generate.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">2</td>
+              <td>Flag fix_duration=8, <i>je .</i> was the text to generate.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">3</td>
+              <td>Flag fix_duration=8.3, <i>jednoduchá .</i> was the text to generate.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">4</td>
+              <td>Flag fix_duration=8, <i>česká .</i> was the text to generate.</td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">5</td>
+              <td>Flag fix_duration=8, <i>věta .</i> was the text to generate.</td>
+            </tr>
+          </tbody>
+        </table>
+    </p>
+
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th>Exp. 1</th>
+            <th>Exp. 2</th>
+            <th>Exp. 3</th>
+            <th>Exp. 4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_per_word_fix_Toto_8.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_per_word_fix_je_8.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_per_word_fix_jednoducha_8_3.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_per_word_fix_ceska_8.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th>Exp. 5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/5_experiments/exp_cz_per_word_fix_veta_8.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="par">
+      To further analyze the reference audio, we can have a look at the signal in time domain to see that speech ends at around 7.5 seconds. The rest is silence.
+    </p>
+    
+
+    <!-- image -->
+    <img src="audio/5_experiments/reference_audio_signal.png" alt="Signal in time domain" style="width: 100%; max-width: 600px;">
+
+    <p class="par">
+      Based on this information, we can generate a sentence word-by-word with dynamic duration per word.
+      The duration is calculated based on the reference audio length and number of characters of the word to generate.
+    </p>
 
     <footer>
       <p>&copy; 2025 Realtime F5-TTS</p>
