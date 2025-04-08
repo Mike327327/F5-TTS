@@ -1,4 +1,4 @@
-from pydub import AudioSegment
+from pydub import AudioSegment, silence
 import argparse
 import os
 import sys
@@ -30,12 +30,26 @@ if "--list_experiments" not in sys.argv:
     )
     from f5_tts.model import DiT
 
-    CKPT_FILE = "/home/m/F5-TTS/ckpts/model_1600000_en.pt"
-    MODEL_CFG = "/home/m/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml"
-    VOCAB_FILE = "/home/m/F5-TTS/data/LibriTTS_100_360_500_char/vocab.txt"
+    ######################## CZ ########################
+    # CKPT_FILE = "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt"
+    # MODEL_CFG = "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml"
+    # VOCAB_FILE = "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt"
+    ######################## EN (non-causal) ########################
+    CKPT_FILE = "/mnt/matylda4/xluner01/F5-TTS/ckpts/LibriTTS_100_360_500/model_1600000_en.pt"
+    MODEL_CFG = "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train_LibriTTS.yaml"
+    VOCAB_FILE = "/mnt/matylda4/xluner01/F5-TTS/data/LibriTTS_100_360_500_char/vocab.txt"
+    ######################## EN (causal) ########################
+    # CKPT_FILE = "/mnt/matylda4/xluner01/F5-TTS/ckpts/LibriTTS_100_360_500/model_1425000_en_causal.pt"
+    # MODEL_CFG = "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train_LibriTTS.yaml"
+    # VOCAB_FILE = "/mnt/matylda4/xluner01/F5-TTS/data/LibriTTS_100_360_500_char/vocab.txt"
+    ######################## EN (pretrained) ########################
+    # CKPT_FILE = "/homes/eva/xl/xluner01/.cache/huggingface/hub/models--SWivid--F5-TTS/snapshots/84e5a410d9cead4de2f847e7c9369a6440bdfaca/F5TTS_Base/model_1200000.safetensors"
+    # MODEL_CFG = "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Base_train.yaml"
+    # VOCAB_FILE = "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/infer/examples/vocab.txt"
+    
     SPEED = speed # 1.0
     CROSSFADE = cross_fade_duration
-    VOCODER_LOCAL_PATH = "/home/m/F5-TTS/checkpoints/vocos-mel-24khz"
+    VOCODER_LOCAL_PATH = "/mnt/matylda4/xluner01/F5-TTS/checkpoints/vocos-mel-24khz"
     VOCODER_NAME = mel_spec_type # vocos
     LOAD_VOCODER_FROM_LOCAL = True
     REMOVE_SILENCE = False
@@ -97,6 +111,19 @@ def print_verbose(text):
     if ARGS.verbose:
         print(text)
         
+def remove_silence_and_get_duration_from_wav(src_file):
+    aseg = AudioSegment.from_file(src_file)
+    non_silent_segs = silence.split_on_silence(aseg, min_silence_len=200, silence_thresh=-50, seek_step=10)
+    non_silent_wave = AudioSegment.silent(duration=0)
+    for non_silent_seg in non_silent_segs:
+        non_silent_wave += non_silent_seg
+    aseg = non_silent_wave
+    aseg.export("tmp_without_silence.wav", format="wav")
+    y, sr = librosa.load(src_file, sr=None)  # `sr=None` preserves original sampling rate
+    duration = librosa.get_duration(y=y, sr=sr)
+    os.remove("tmp_without_silence.wav")
+    return duration
+        
 # Temporarily disable printing
 def suppress_print(func, *args, **kwargs):
     # Backup the original stdout
@@ -121,7 +148,7 @@ def load_f5_model():
     
     ema_model = load_model(model_cls, model_cfg, CKPT_FILE, mel_spec_type=VOCODER_NAME, vocab_file=VOCAB_FILE)
 
-def run_inference(ref_audio, ref_text, gen_text, gen_audio_path):
+def run_inference(ref_audio, ref_text, gen_text, gen_audio_path, fix_dur=fix_duration):
     main_voice = {"ref_audio": ref_audio, "ref_text": ref_text}
     voices = {"main": main_voice}
     voices["main"]["ref_audio"], voices["main"]["ref_text"] = preprocess_ref_audio_text(
@@ -131,6 +158,12 @@ def run_inference(ref_audio, ref_text, gen_text, gen_audio_path):
     ref_audio_ = voices["main"]["ref_audio"]
     ref_text_ = voices["main"]["ref_text"]
     gen_text_ = gen_text.strip()
+    
+    # fix_duration experiment (if fix_dur is set and not equal to the default fix_duration, use it)
+    if fix_dur != fix_duration:
+        final_fix_duration = fix_dur
+    else:
+        final_fix_duration = fix_duration
     
     wave, sample_rate, spectrogram = infer_process(
         ref_audio_,
@@ -145,7 +178,7 @@ def run_inference(ref_audio, ref_text, gen_text, gen_audio_path):
         cfg_strength=cfg_strength,
         sway_sampling_coef=sway_sampling_coef,
         speed=SPEED,
-        fix_duration=fix_duration,
+        fix_duration=final_fix_duration,
     )
 
     with open(gen_audio_path, "wb") as f:
@@ -171,6 +204,32 @@ def get_chunks(text, chunk_size):
         text_chunks.append(chunk)
     
     return text_chunks
+
+# Based on the min_chars, divide the text into chunks
+def get_dynamic_chunks(text, min_chars=10):
+    initial_chunks = get_chunks(text, 1)
+    
+    text_chunks = []
+    current_chunk = ""
+    
+    for word in initial_chunks:
+        # If adding the word keeps us under the limit or we’re building the first part, keep adding
+        if len(current_chunk) + len(word) + 1 <= min_chars:
+            if current_chunk:
+                current_chunk += " " + word
+            else:
+                current_chunk = word
+        else:
+            # Current chunk is big enough, so we save it and start a new one
+            if current_chunk:
+                text_chunks.append(current_chunk)
+            current_chunk = word
+
+    # add the last chunk
+    if current_chunk:
+        text_chunks.append(current_chunk)
+    
+    return text_chunks
     
 # Convert AudioSegment to numpy array (mono)
 def audiosegment_to_np(audio_seg):
@@ -182,7 +241,7 @@ def audiosegment_to_np(audio_seg):
     return samples
 
 ############################ 0 ############################
-# Generate audio using the model as-is, e.g., full sentence generation, conditioned on the fixed reference audio and text
+# Generate audio using the model as-is, e.g., full sentence generation, conditioned on the fixed reference audio and text.
 def experiment_default_per_sentence():
     experiment_id = f'experiment_default_per_sentence'
     
@@ -221,7 +280,7 @@ def experiment_default_per_sentence():
         print_verbose(f"Audio saved as {Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav')}")
 
 ############################ 1 ############################
-# Generate audio per chunk (word, multiple words), conditioned on the fixed reference audio and text
+# Generate audio per chunk (word, multiple words), conditioned on the fixed reference audio and text.
 def experiment_per_chunk(chunk_size=1):
     experiment_id = f'experiment_per_chunk_size_{chunk_size}'
     
@@ -274,7 +333,7 @@ def experiment_per_chunk(chunk_size=1):
         print_verbose(f"Audio saved as {Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav')}")
 
 ############################ 2 ############################
-# Generate audio per chunk (word, multiple words), conditioned on the fixed reference & last generated audio and text         
+# Generate audio per chunk (word, multiple words), conditioned on the fixed reference & last generated audio and text.  
 def experiment_per_chunk_gen_cond(chunk_size=1):
     experiment_id = f'experiment_per_chunk_size_{chunk_size}_gen_cond'
     
@@ -292,7 +351,7 @@ def experiment_per_chunk_gen_cond(chunk_size=1):
         with open(gen_text, "r") as f:
             gen_text_file_name = os.path.basename(gen_text)
             gen_text = f.read().strip()
-            gen_text_chunks = get_chunks(gen_text, chunk_size) # divide the text into chunks on space
+            gen_text_chunks = get_chunks(gen_text, chunk_size)
             gen_texts[gen_text_file_name] = gen_text_chunks
             
     os.makedirs(Path(ARGS.audio_gen_output_folder, experiment_id), exist_ok=True)
@@ -328,7 +387,7 @@ def experiment_per_chunk_gen_cond(chunk_size=1):
 
             # Update reference text (append new chunk)
             ref_text = original_ref_text + " " + chunk + " ."  # Keep original text + add new text
-            # concatenate the new audio with the original reference audio
+            # Concatenate the new audio with the original reference audio
             conc = AudioSegment.from_wav(original_ref_audio) + generated_audio
             conc.export(Path(ARGS.audio_gen_output_folder, experiment_id, "concatenated_tmp.wav"), format="wav")
             ref_audio = Path(ARGS.audio_gen_output_folder, experiment_id, "concatenated_tmp.wav") # Keep original audio + add new audio
@@ -340,7 +399,7 @@ def experiment_per_chunk_gen_cond(chunk_size=1):
         print_verbose(f"Audio saved as {Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav')}")
 
 ############################ 3 ############################
-# Generate audio per chunk (word, multiple words), conditioned on the fixed reference & last generated audio with silence and text
+# Generate audio per chunk (word, multiple words), conditioned on the fixed reference & last generated audio with silence and text.
 def experiment_per_chunk_gen_cond_with_silence(chunk_size=1, silence_len=100):
     experiment_id = f'experiment_per_chunk_size_{chunk_size}_gen_cond_with_silence_{silence_len}_ms'
         
@@ -394,7 +453,7 @@ def experiment_per_chunk_gen_cond_with_silence(chunk_size=1, silence_len=100):
 
             # Update reference text (append new chunk)
             ref_text = original_ref_text + " " + chunk + " ."  # Keep original text + add new text
-            # concatenate the new audio with the original reference audio
+            # Concatenate the new audio with the original reference audio
             conc = AudioSegment.from_wav(original_ref_audio) + generated_audio
             conc.export(Path(ARGS.audio_gen_output_folder, experiment_id, "concatenated_tmp.wav"), format="wav")
             ref_audio = Path(ARGS.audio_gen_output_folder, experiment_id, "concatenated_tmp.wav") # Keep original audio + add new audio
@@ -406,10 +465,8 @@ def experiment_per_chunk_gen_cond_with_silence(chunk_size=1, silence_len=100):
         print_verbose(f"Audio saved as {Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav')}")
 
 ############################ 4 ############################
-# Generate audio per increasing chunk (word, multiple words), conditioned on the fixed reference, obtain only the new word using DTW and concatenate with the previous audio
+# Generate audio per increasing chunk (word, multiple words), conditioned on the fixed reference, obtain only the new word using DTW and concatenate with the previous audio.
 def experiment_dtw(window_size=1):
-    # TODO make sliding window history, do not generate everything from the beginning
-    # TODO add some padding text after first 1-2 words to make the generated audio more natural
     experiment_id = f'experiment_dtw_window_size_{window_size}'
         
     ref_audio = ARGS.audio_ref_file
@@ -457,7 +514,7 @@ def experiment_dtw(window_size=1):
             curr_audio_seg, _ = librosa.load(output_wav_path, sr=24000)
             
             if len(chunks) > 1:
-                 # Load audio for the previous and current chunks as numpy arrays
+                # Load audio for the previous and current chunks as numpy arrays
                 wav_prev, sr = librosa.load(output_wav_path_prev, sr=24000)
                 wav_curr, _ = librosa.load(output_wav_path, sr=24000)
 
@@ -492,6 +549,179 @@ def experiment_dtw(window_size=1):
         for i in range(len(gen_text)):
             os.remove(Path(ARGS.audio_gen_output_folder, experiment_id, f'output_chunk_{i}.wav'))
 
+############################ 5 ############################
+# Generate audio per chunk (word), set fix_duration value based on the length of the word.
+#  chunk_size = 1:                     Generate audio per word (1 word).
+#  cond_on_last_gen_audio = False:     Conditioned on the fixed reference audio and text.
+#  cond_on_last_gen_audio = True:      Conditioned on the last generated audio chunk and text, without the reference audio.
+#  sliding_window_size = 4:            Number of last generated audio chunks to be concatenated.
+def experiment_per_chunk_fix_duration(chunk_size=1, cond_on_last_gen_audio=False, sliding_window_size=4):
+    if cond_on_last_gen_audio:
+        experiment_id = f'experiment_per_chunk_size_{chunk_size}_fix_duration_gen_cond'
+    else:
+        experiment_id = f'experiment_per_chunk_size_{chunk_size}_fix_duration'
+    
+    ref_audio = ARGS.audio_ref_file
+    ref_text = ARGS.text_ref_file
+    
+    # Load reference text
+    with open(ref_text, "r") as f:
+        ref_text = f.read().strip()
+    
+    # Load all files in the text_gen_folder
+    gen_texts_paths = [os.path.join(ARGS.text_gen_folder, file) for file in os.listdir(ARGS.text_gen_folder)]
+    gen_texts = {}
+    for gen_text in gen_texts_paths:
+        with open(gen_text, "r") as f:
+            gen_text_file_name = os.path.basename(gen_text)
+            gen_text = f.read().strip()
+            gen_text_chunks = get_chunks(gen_text, chunk_size)
+            gen_texts[gen_text_file_name] = gen_text_chunks
+            
+    # Calculate the duration of the reference audio without silence
+    ref_audio_duration = remove_silence_and_get_duration_from_wav(ref_audio)
+    
+    os.makedirs(Path(ARGS.audio_gen_output_folder, experiment_id), exist_ok=True)
+    
+    # Keep the original values for conditioning on the last generated audio variant
+    original_ref_text = ref_text
+    original_ref_audio = ref_audio
+    
+    for gen_text_file_name, gen_text in tqdm(gen_texts.items()):
+        final_audio = AudioSegment.silent(duration=0)
+        ref_audio = original_ref_audio
+        ref_text = original_ref_text
+        chunks_text_acc = []
+        chunks_audio_acc = []
+        
+        for i, chunk in enumerate(gen_text):
+            chunks_text_acc.append(chunk)
+            
+            output_wav_path = Path(ARGS.audio_gen_output_folder, experiment_id, f'output_chunk_{i}.wav')
+
+            if ARGS.verbose:
+                print("==========================================================================")
+                print(f'Current chunk to generate:\t {i+1}: {chunk}')
+                print(f'Reference text:\t\t {ref_text}')
+                print(f'Reference audio:\t {ref_audio}')
+                print("==========================================================================")
+                
+            # Based on the length of the word, set the fix_duration value
+            if len(chunk) <= 5:
+                audio_duration = ref_audio_duration + 0.4
+            elif len(chunk) <= 10:
+                audio_duration = ref_audio_duration + 0.7
+            else:
+                audio_duration = ref_audio_duration + 1.0
+                
+            print_verbose(f"Word duration: {audio_duration} seconds, where ref_audio_duration without silence: {ref_audio_duration} seconds")
+
+            # Run inference
+            # run_inference(ref_audio, ref_text, chunk, output_wav_path)
+            suppress_print(run_inference, ref_audio, ref_text, chunk, output_wav_path, fix_dur=audio_duration)
+            
+            # Load generated audio
+            generated_audio = AudioSegment.from_wav(output_wav_path)
+
+            # Append to final audio
+            final_audio += generated_audio
+            
+            # Append to sliding window in order to be able to concatenate the last sliding_window_size generated audio chunks
+            chunks_audio_acc.append(generated_audio)
+            
+            # Delete the generated audio file chunk
+            os.remove(output_wav_path)
+            
+            # Update reference text and audio
+            if cond_on_last_gen_audio and len(chunks_text_acc) >= sliding_window_size:
+                ref_text = " ".join(chunks_text_acc[-sliding_window_size:]) + " ."
+                # Concatenate last sliding_window_size generated audio chunks from chunks_audio_acc
+                ref_audio = AudioSegment.silent(duration=0)
+                for j in range(len(chunks_audio_acc) - sliding_window_size, len(chunks_audio_acc)):
+                    ref_audio += chunks_audio_acc[j]
+                # Save the concatenated audio to a temporary file
+                ref_audio.export(Path(ARGS.audio_gen_output_folder, experiment_id, "concatenated_tmp.wav"), format="wav")
+                ref_audio = Path(ARGS.audio_gen_output_folder, experiment_id, "concatenated_tmp.wav") 
+
+        # Save final concatenated audio
+        final_audio.export(Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav'), format="wav")
+        # Delete the temporary concatenated audio file
+        if cond_on_last_gen_audio:
+            os.remove(Path(ARGS.audio_gen_output_folder, experiment_id, "concatenated_tmp.wav"))
+        print_verbose(f"Audio saved as {Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav')}")
+
+############################ 6 ############################
+# Generate audio per chunk (multiple words), which consist of a minimum number of characters.
+#   cond_on_last_gen_audio = False:     Conditioned on the fixed reference audio and text.
+#   cond_on_last_gen_audio = True:      Conditioned on the last generated audio chunk and text (without the reference audio).
+def experiment_per_dynamic_sized_chunk(cond_on_last_gen_audio=False):
+    if cond_on_last_gen_audio:
+        experiment_id = f'experiment_per_dynamic_sized_chunk_gen_cond'
+    else:
+        experiment_id = f'experiment_per_dynamic_sized_chunk'
+    
+    ref_audio = ARGS.audio_ref_file
+    ref_text = ARGS.text_ref_file
+    
+    # Load reference text
+    with open(ref_text, "r") as f:
+        ref_text = f.read().strip()
+    
+    # Load all files in the text_gen_folder
+    gen_texts_paths = [os.path.join(ARGS.text_gen_folder, file) for file in os.listdir(ARGS.text_gen_folder)]
+    gen_texts = {}
+    for gen_text in gen_texts_paths:
+        with open(gen_text, "r") as f:
+            gen_text_file_name = os.path.basename(gen_text)
+            gen_text = f.read().strip()
+            gen_text_chunks = get_dynamic_chunks(gen_text, min_chars=10) # divide the text into chunks
+            gen_texts[gen_text_file_name] = gen_text_chunks
+            
+    os.makedirs(Path(ARGS.audio_gen_output_folder, experiment_id), exist_ok=True)
+    
+    original_ref_text = ref_text
+    original_ref_audio = ref_audio
+    
+    for gen_text_file_name, gen_text in tqdm(gen_texts.items()):
+        final_audio = AudioSegment.silent(duration=0)
+        ref_audio = original_ref_audio
+        ref_text = original_ref_text
+        for i, chunk in enumerate(gen_text):
+            output_wav_path = Path(ARGS.audio_gen_output_folder, experiment_id, f'output_chunk_{i}.wav')
+
+            if ARGS.verbose:
+                print("==========================================================================")
+                print(f'Current chunk to generate:\t {i+1}: {chunk}')
+                print(f'Reference text:\t\t {ref_text}')
+                print(f'Reference audio:\t {ref_audio}')
+                print("==========================================================================")
+
+            # Run inference
+            # run_inference(ref_audio, ref_text, chunk, output_wav_path)
+            suppress_print(run_inference, ref_audio, ref_text, chunk, output_wav_path)
+            
+            # Load generated audio
+            generated_audio = AudioSegment.from_wav(output_wav_path)
+
+            # Append to final audio
+            final_audio += generated_audio
+            
+            # Delete the generated audio file chunk
+            os.remove(output_wav_path)
+            
+            # Update reference text
+            if cond_on_last_gen_audio:
+                ref_text = chunk + " ."
+                # Save the generated audio to a temporary file
+                generated_audio.export(Path(ARGS.audio_gen_output_folder, experiment_id, "chunk_tmp.wav"), format="wav")
+                ref_audio = Path(ARGS.audio_gen_output_folder, experiment_id, "chunk_tmp.wav")
+
+        # Save final concatenated audio
+        final_audio.export(Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav'), format="wav")
+        # Delete the temporary generated audio file
+        os.remove(Path(ARGS.audio_gen_output_folder, experiment_id, "chunk_tmp.wav"))
+        print_verbose(f"Audio saved as {Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav')}")
+        
 if __name__ == "__main__":   
     ARGS = parse_args()
     
@@ -502,6 +732,8 @@ if __name__ == "__main__":
         print("\t 2: Generate audio per chunk (word, multiple words), conditioned on the fixed reference & last generated audio.")
         print("\t 3: Generate audio per chunk (word, multiple words), conditioned on the fixed reference & last generated audio with silence.")
         print("\t 4: Generate audio per increasing chunk (word, multiple words), conditioned on the fixed reference, obtain only the new word using DTW and concatenate with the previous audio.")
+        print("\t 5: Generate audio per chunk (word), set fix_duration value based on the length of the word. Conditioned on the fixed reference or the last generated audio.")
+        print("\t 6: Generate audio per dynamically sized chunk (multiple words). Conditioned either on the fixed reference or the last generated audio.")
         exit(0)
     
     # Load the F5-TTS model
@@ -513,25 +745,28 @@ if __name__ == "__main__":
     if ARGS.experiment is None:
         print("Running all experiments...")
         
-        print_verbose("Running experiment 0...")
+        print("Running experiment 0...")
         experiment_default_per_sentence()
         
-        print_verbose("Running experiment 1...")
+        print("Running experiment 1...")
         experiment_per_chunk(chunk_size=1)
         # experiment_per_chunk(chunk_size=2)
         
-        print_verbose("Running experiment 2...")
+        print("Running experiment 2...")
         experiment_per_chunk_gen_cond(chunk_size=1)
         # experiment_per_chunk_gen_cond(chunk_size=2)
         
-        print_verbose("Running experiment 3...")
+        print("Running experiment 3...")
         experiment_per_chunk_gen_cond_with_silence(chunk_size=1, silence_len=100)
         experiment_per_chunk_gen_cond_with_silence(chunk_size=2, silence_len=100)
         experiment_per_chunk_gen_cond_with_silence(chunk_size=1, silence_len=300)
         experiment_per_chunk_gen_cond_with_silence(chunk_size=2, silence_len=300)
         
-        print_verbose("Running experiment 4...")
+        print("Running experiment 4...")
         experiment_dtw(window_size=1)
+        
+        print("Running experiment 5...")
+        experiment_per_chunk_fix_duration(chunk_size=1)
         
     else:
         print(f"Running experiment {ARGS.experiment}...")
@@ -552,6 +787,8 @@ if __name__ == "__main__":
             experiment_per_chunk_gen_cond_with_silence(chunk_size=2, silence_len=500)
         elif ARGS.experiment == 4:
             experiment_dtw(window_size=1)
+        elif ARGS.experiment == 5:
+            experiment_per_chunk_fix_duration(chunk_size=1)
         else:
             print("Invalid experiment ID. Please select a valid experiment ID.")
             exit(0)
