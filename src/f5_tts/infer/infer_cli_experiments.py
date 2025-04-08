@@ -395,7 +395,8 @@ def experiment_per_chunk_gen_cond(chunk_size=1):
         # Save final concatenated audio
         final_audio.export(Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav'), format="wav")
         # Delete the temporary concatenated audio file
-        os.remove(Path(ARGS.audio_gen_output_folder, experiment_id, "concatenated_tmp.wav"))	
+        if os.path.exists(Path(ARGS.audio_gen_output_folder, experiment_id, "concatenated_tmp.wav")):
+            os.remove(Path(ARGS.audio_gen_output_folder, experiment_id, "concatenated_tmp.wav"))	
         print_verbose(f"Audio saved as {Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav')}")
 
 ############################ 3 ############################
@@ -466,8 +467,8 @@ def experiment_per_chunk_gen_cond_with_silence(chunk_size=1, silence_len=100):
 
 ############################ 4 ############################
 # Generate audio per increasing chunk (word, multiple words), conditioned on the fixed reference, obtain only the new word using DTW and concatenate with the previous audio.
-def experiment_dtw(window_size=1):
-    experiment_id = f'experiment_dtw_window_size_{window_size}'
+def experiment_dtw():
+    experiment_id = f'experiment_dtw'
         
     ref_audio = ARGS.audio_ref_file
     ref_text = ARGS.text_ref_file
@@ -557,7 +558,7 @@ def experiment_dtw(window_size=1):
 #  sliding_window_size = 4:            Number of last generated audio chunks to be concatenated.
 def experiment_per_chunk_fix_duration(chunk_size=1, cond_on_last_gen_audio=False, sliding_window_size=4):
     if cond_on_last_gen_audio:
-        experiment_id = f'experiment_per_chunk_size_{chunk_size}_fix_duration_gen_cond'
+        experiment_id = f'experiment_per_chunk_size_{chunk_size}_fix_duration_gen_cond_sliding_window_size_{sliding_window_size}'
     else:
         experiment_id = f'experiment_per_chunk_size_{chunk_size}_fix_duration'
     
@@ -646,7 +647,7 @@ def experiment_per_chunk_fix_duration(chunk_size=1, cond_on_last_gen_audio=False
         # Save final concatenated audio
         final_audio.export(Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav'), format="wav")
         # Delete the temporary concatenated audio file
-        if cond_on_last_gen_audio:
+        if cond_on_last_gen_audio and os.path.exists(Path(ARGS.audio_gen_output_folder, experiment_id, "concatenated_tmp.wav")):
             os.remove(Path(ARGS.audio_gen_output_folder, experiment_id, "concatenated_tmp.wav"))
         print_verbose(f"Audio saved as {Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav')}")
 
@@ -654,11 +655,11 @@ def experiment_per_chunk_fix_duration(chunk_size=1, cond_on_last_gen_audio=False
 # Generate audio per chunk (multiple words), which consist of a minimum number of characters.
 #   cond_on_last_gen_audio = False:     Conditioned on the fixed reference audio and text.
 #   cond_on_last_gen_audio = True:      Conditioned on the last generated audio chunk and text (without the reference audio).
-def experiment_per_dynamic_sized_chunk(cond_on_last_gen_audio=False):
+def experiment_per_dynamic_sized_chunk(cond_on_last_gen_audio=False, min_chars=10):
     if cond_on_last_gen_audio:
-        experiment_id = f'experiment_per_dynamic_sized_chunk_gen_cond'
+        experiment_id = f'experiment_per_dynamic_sized_chunk__min_chars_{min_chars}_gen_cond'
     else:
-        experiment_id = f'experiment_per_dynamic_sized_chunk'
+        experiment_id = f'experiment_per_dynamic_sized_chunk_min_chars_{min_chars}'
     
     ref_audio = ARGS.audio_ref_file
     ref_text = ARGS.text_ref_file
@@ -674,7 +675,7 @@ def experiment_per_dynamic_sized_chunk(cond_on_last_gen_audio=False):
         with open(gen_text, "r") as f:
             gen_text_file_name = os.path.basename(gen_text)
             gen_text = f.read().strip()
-            gen_text_chunks = get_dynamic_chunks(gen_text, min_chars=10) # divide the text into chunks
+            gen_text_chunks = get_dynamic_chunks(gen_text, min_chars=min_chars) # divide the text into chunks
             gen_texts[gen_text_file_name] = gen_text_chunks
             
     os.makedirs(Path(ARGS.audio_gen_output_folder, experiment_id), exist_ok=True)
@@ -719,7 +720,8 @@ def experiment_per_dynamic_sized_chunk(cond_on_last_gen_audio=False):
         # Save final concatenated audio
         final_audio.export(Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav'), format="wav")
         # Delete the temporary generated audio file
-        os.remove(Path(ARGS.audio_gen_output_folder, experiment_id, "chunk_tmp.wav"))
+        if os.path.exists(Path(ARGS.audio_gen_output_folder, experiment_id, "chunk_tmp.wav")):
+            os.remove(Path(ARGS.audio_gen_output_folder, experiment_id, "chunk_tmp.wav"))
         print_verbose(f"Audio saved as {Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav')}")
         
 if __name__ == "__main__":   
@@ -743,30 +745,45 @@ if __name__ == "__main__":
     # run_inference(ARGS.audio_ref_file, "My wife, on the spur of the moment, managed to give the gentleman a very good dinner." , "My wife, on the spur of the moment, managed to give the gentleman a very good dinner.", "/home/m/output.wav")
     
     if ARGS.experiment is None:
-        print("Running all experiments...")
+        # print("Running all experiments...")
         
-        print("Running experiment 0...")
-        experiment_default_per_sentence()
+        # print("Running experiment 0...")
+        # experiment_default_per_sentence()
         
-        print("Running experiment 1...")
-        experiment_per_chunk(chunk_size=1)
-        # experiment_per_chunk(chunk_size=2)
+        # print("Running experiment 1...")
+        # experiment_per_chunk(chunk_size=1)
+        # # experiment_per_chunk(chunk_size=2)
         
-        print("Running experiment 2...")
-        experiment_per_chunk_gen_cond(chunk_size=1)
-        # experiment_per_chunk_gen_cond(chunk_size=2)
+        # print("Running experiment 2...")
+        # experiment_per_chunk_gen_cond(chunk_size=1)
+        # # experiment_per_chunk_gen_cond(chunk_size=2)
         
-        print("Running experiment 3...")
-        experiment_per_chunk_gen_cond_with_silence(chunk_size=1, silence_len=100)
-        experiment_per_chunk_gen_cond_with_silence(chunk_size=2, silence_len=100)
-        experiment_per_chunk_gen_cond_with_silence(chunk_size=1, silence_len=300)
-        experiment_per_chunk_gen_cond_with_silence(chunk_size=2, silence_len=300)
+        # print("Running experiment 3...")
+        # experiment_per_chunk_gen_cond_with_silence(chunk_size=1, silence_len=100)
+        # experiment_per_chunk_gen_cond_with_silence(chunk_size=2, silence_len=100)
+        # experiment_per_chunk_gen_cond_with_silence(chunk_size=1, silence_len=300)
+        # experiment_per_chunk_gen_cond_with_silence(chunk_size=2, silence_len=300)
         
-        print("Running experiment 4...")
-        experiment_dtw(window_size=1)
+        # print("Running experiment 4...")
+        # experiment_dtw()
         
         print("Running experiment 5...")
+        print("chunk size 1...")
         experiment_per_chunk_fix_duration(chunk_size=1)
+        print("chunk size 2...")
+        experiment_per_chunk_fix_duration(chunk_size=2)
+        print("chunk size 1 with cond_on_last_gen_audio and sliding_window_size=4...")
+        experiment_per_chunk_fix_duration(chunk_size=1, cond_on_last_gen_audio=True, sliding_window_size=4)
+        print("chunk size 2 with cond_on_last_gen_audio and sliding_window_size=4...")
+        experiment_per_chunk_fix_duration(chunk_size=2, cond_on_last_gen_audio=True, sliding_window_size=4)
+        print("chunk size 1 with cond_on_last_gen_audio and sliding_window_size=2...")
+        experiment_per_chunk_fix_duration(chunk_size=1, cond_on_last_gen_audio=True, sliding_window_size=2)
+        print("chunk size 2 with cond_on_last_gen_audio and sliding_window_size=2...")
+        experiment_per_chunk_fix_duration(chunk_size=2, cond_on_last_gen_audio=True, sliding_window_size=2)
+        
+        print("Running experiment 6...")
+        experiment_per_dynamic_sized_chunk(cond_on_last_gen_audio=False)
+        experiment_per_dynamic_sized_chunk(cond_on_last_gen_audio=True)
         
     else:
         print(f"Running experiment {ARGS.experiment}...")
@@ -786,9 +803,17 @@ if __name__ == "__main__":
             experiment_per_chunk_gen_cond_with_silence(chunk_size=1, silence_len=500)
             experiment_per_chunk_gen_cond_with_silence(chunk_size=2, silence_len=500)
         elif ARGS.experiment == 4:
-            experiment_dtw(window_size=1)
+            experiment_dtw()
         elif ARGS.experiment == 5:
             experiment_per_chunk_fix_duration(chunk_size=1)
+            experiment_per_chunk_fix_duration(chunk_size=2)
+            experiment_per_chunk_fix_duration(chunk_size=1, cond_on_last_gen_audio=True, sliding_window_size=4)
+            experiment_per_chunk_fix_duration(chunk_size=2, cond_on_last_gen_audio=True, sliding_window_size=4)
+            experiment_per_chunk_fix_duration(chunk_size=1, cond_on_last_gen_audio=True, sliding_window_size=2)
+            experiment_per_chunk_fix_duration(chunk_size=2, cond_on_last_gen_audio=True, sliding_window_size=2)
+        elif ARGS.experiment == 6:
+            experiment_per_dynamic_sized_chunk(cond_on_last_gen_audio=False)
+            experiment_per_dynamic_sized_chunk(cond_on_last_gen_audio=True)
         else:
             print("Invalid experiment ID. Please select a valid experiment ID.")
             exit(0)
