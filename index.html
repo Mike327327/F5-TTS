@@ -749,6 +749,53 @@
       The duration is calculated based on the reference audio length and number of characters of the word to generate.
     </p>
 
+    <p class="par">
+      Overview of details for each experiment is provided in the table below. TBD make it in Czech, now it's in English.
+      <br>
+      <b>Reference sentence</b>: <i>The vast cycle of starry life bore his weary mind outward to its verge and inward to its centre, a distant music accompanying him outward and inward.</i>
+      <table border="1" cellspacing="0" cellpadding="6">
+        <thead>
+          <tr>
+            <th style="text-align: center;">Experiment</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center;">1</td>
+            <td>Default generation - full-sentence.</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">2</td>
+            <td>Generated per chunk (word) with default arguments.</td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">3</td>
+            <td>Generated per chunk (word) with dynamically set fix_duration argument.</td>
+          </tr>
+        </tbody>
+      </table>
+    </p>
+
+    <div class="audio-samples">
+      <table style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th>Exp. 1</th>
+            <th>Exp. 2</th>
+            <th>Exp. 3</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><audio controls style="width: 250px;"><source src="audio/6_experiments/experiment_default_per_sentence.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/6_experiments/experiment_per_chunk_size_1.wav" type="audio/wav"></audio></td>
+            <td><audio controls style="width: 250px;"><source src="audio/6_experiments/experiment_per_chunk_size_1_fix_duration.wav" type="audio/wav"></audio></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <footer>
       <p>&copy; 2025 Realtime F5-TTS</p>
     </footer>
