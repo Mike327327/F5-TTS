@@ -13,7 +13,8 @@ from cached_path import cached_path
 from omegaconf import OmegaConf
 from scipy.signal import correlate
 import whisper_timestamped as whisper
-import json
+import time
+import torch
 
 if "--list_experiments" not in sys.argv:
     from f5_tts.infer.utils_infer import (
@@ -33,10 +34,18 @@ if "--list_experiments" not in sys.argv:
     )
     from f5_tts.model import DiT
 
-    ######################## CZ ########################
+    ######################## CZ (non-causal) ########################
     # CKPT_FILE = "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt"
     # MODEL_CFG = "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml"
     # VOCAB_FILE = "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt"
+    ######################## CZ (causal) ########################
+    # CKPT_FILE = "/mnt/matylda4/xluner01/F5-TTS/ckpts/F5TTS_Small_vocos_char_ParCzech_2020_2021/model_600000.pt"
+    # MODEL_CFG = "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml"
+    # VOCAB_FILE = "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt"
+    ######################## CZ (fine-tuned) ########################
+    # CKPT_FILE = "/mnt/matylda5/xfolty17/TTS/F5-TTS/ckpts/ParCzech_2018_2019_2020_2021/model_last.pt"
+    # MODEL_CFG = "/mnt/matylda5/xfolty17/TTS/F5-TTS/src/f5_tts/configs/F5TTS_v1_Base_ParCzech.yaml"
+    # VOCAB_FILE = "/mnt/matylda5/xfolty17/TTS/F5-TTS/data/ParCzech_2018_2019_2020_2021_char/vocab.txt"
     ######################## EN (non-causal) ########################
     # CKPT_FILE = "/mnt/matylda4/xluner01/F5-TTS/ckpts/LibriTTS_100_360_500/model_1600000_en.pt"
     # MODEL_CFG = "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train_LibriTTS.yaml"
@@ -49,6 +58,8 @@ if "--list_experiments" not in sys.argv:
     CKPT_FILE = "/homes/eva/xl/xluner01/.cache/huggingface/hub/models--SWivid--F5-TTS/snapshots/84e5a410d9cead4de2f847e7c9369a6440bdfaca/F5TTS_Base/model_1200000.safetensors"
     MODEL_CFG = "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Base_train.yaml"
     VOCAB_FILE = "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/infer/examples/vocab.txt"
+
+    LANG = "en"
     
     SPEED = speed # 1.0
     CROSSFADE = cross_fade_duration
@@ -58,8 +69,6 @@ if "--list_experiments" not in sys.argv:
     REMOVE_SILENCE = False
     
     FS = 24000
-    
-    LANG = "en"
 
 ARGS = None
 
@@ -111,8 +120,49 @@ def parse_args():
         type=int, 
         help="If not provided, run all experiments. Otherwise, run the specified experiment (see --list_experiment)."
     )
+    parser.add_argument(
+        "--model",
+        type=str, 
+        choices=["en_base_pretrained", "en_small", "en_small_causal", "cz_small", "cz_small_causal", "cz_base_finetuned"],
+        help="If not provided, pretrained English base model will be used."
+    )
 
     return parser.parse_args()
+
+def set_model_paths():
+    global CKPT_FILE, MODEL_CFG, VOCAB_FILE, LANG
+
+    if ARGS.model == "en_small":
+        CKPT_FILE = "/mnt/matylda4/xluner01/F5-TTS/ckpts/LibriTTS_100_360_500/model_1600000_en.pt"
+        MODEL_CFG = "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train_LibriTTS.yaml"
+        VOCAB_FILE = "/mnt/matylda4/xluner01/F5-TTS/data/LibriTTS_100_360_500_char/vocab.txt"
+        LANG = "en"
+    elif ARGS.model == "en_small_causal":
+        CKPT_FILE = "/mnt/matylda4/xluner01/F5-TTS/ckpts/LibriTTS_100_360_500/model_1425000_en_causal.pt"
+        MODEL_CFG = "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train_LibriTTS.yaml"
+        VOCAB_FILE = "/mnt/matylda4/xluner01/F5-TTS/data/LibriTTS_100_360_500_char/vocab.txt"
+        LANG = "en"
+    elif ARGS.model == "cz_small":
+        CKPT_FILE = "/mnt/matylda4/xluner01/F5-TTS/ckpts/ParCzech_2020_2021/model_7850000.pt"
+        MODEL_CFG = "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml"
+        VOCAB_FILE = "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt"
+        LANG = "cs"
+    elif ARGS.model == "cz_small_causal":
+        CKPT_FILE = "/mnt/matylda4/xluner01/F5-TTS/ckpts/F5TTS_Small_vocos_char_ParCzech_2020_2021/model_600000.pt"
+        MODEL_CFG = "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Small_train.yaml"
+        VOCAB_FILE = "/mnt/matylda4/xluner01/F5-TTS/data/ParCzech_2020_2021_char/vocab.txt"
+        LANG = "cs"
+    elif ARGS.model == "cz_base_finetuned":
+        CKPT_FILE = "/mnt/matylda5/xfolty17/TTS/F5-TTS/ckpts/ParCzech_2018_2019_2020_2021/model_last.pt"
+        MODEL_CFG = "/mnt/matylda5/xfolty17/TTS/F5-TTS/src/f5_tts/configs/F5TTS_v1_Base_ParCzech.yaml"
+        VOCAB_FILE = "/mnt/matylda5/xfolty17/TTS/F5-TTS/data/ParCzech_2018_2019_2020_2021_char/vocab.txt"
+        LANG = "cs"
+    else:
+        print("Either invalid model name or model not provided. Using the default pretrained English base model.")
+        CKPT_FILE = "/homes/eva/xl/xluner01/.cache/huggingface/hub/models--SWivid--F5-TTS/snapshots/84e5a410d9cead4de2f847e7c9369a6440bdfaca/F5TTS_Base/model_1200000.safetensors"
+        MODEL_CFG = "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/configs/F5TTS_Base_train.yaml"
+        VOCAB_FILE = "/mnt/matylda4/xluner01/F5-TTS/src/f5_tts/infer/examples/vocab.txt"
+        LANG = "en"
 
 def print_verbose(text):
     if ARGS.verbose:
@@ -206,6 +256,11 @@ def run_inference(ref_audio, ref_text, gen_text, gen_audio_path, fix_dur=fix_dur
     else:
         final_fix_duration = fix_duration
     
+    # latency
+    if torch.cuda.is_available():
+        torch.cuda.synchronize()
+    start_time = time.perf_counter()
+    
     wave, sample_rate, spectrogram = infer_process(
         ref_audio_,
         ref_text_,
@@ -221,6 +276,20 @@ def run_inference(ref_audio, ref_text, gen_text, gen_audio_path, fix_dur=fix_dur
         speed=SPEED,
         fix_duration=final_fix_duration,
     )
+
+    # latency
+    if torch.cuda.is_available():
+        torch.cuda.synchronize()
+    end_time = time.perf_counter()
+
+    latency = end_time - start_time
+    
+    print_verbose(f"Latency: {latency:.2f}s")
+
+    # TODO: compute RTF only for the per_sentence generation
+    # audio_duration = len(wave) / sample_rate
+    # rtf = latency / audio_duration
+    # print_verbose(f"Audio duration: {audio_duration:.2f}s | Latency: {latency:.2f}s | RTF: {rtf:.2f}")
 
     with open(gen_audio_path, "wb") as f:
         sf.write(f.name, wave, sample_rate)
@@ -816,18 +885,25 @@ def experiment_per_chunk_fix_duration(chunk_size=1, remove_silence=False):
                 print("==========================================================================")
                 
             # Based on the length of the word, set the fix_duration value
+            # if len(chunk) <= 5:
+            #     audio_duration = ref_audio_duration + 0.7
+            # elif len(chunk) <= 10:
+            #     audio_duration = ref_audio_duration + 1.0
+            # else:
+            #     audio_duration = ref_audio_duration + 1.5
+            
             if len(chunk) <= 5:
-                audio_duration = ref_audio_duration + 0.7
+                audio_duration = ref_audio_duration
             elif len(chunk) <= 10:
-                audio_duration = ref_audio_duration + 1.0
+                audio_duration = ref_audio_duration + 0.3
             else:
-                audio_duration = ref_audio_duration + 1.5
+                audio_duration = ref_audio_duration + 0.5
                 
             print_verbose(f"Word duration: {audio_duration} seconds, where ref_audio_duration without silence: {ref_audio_duration} seconds")
 
             # Run inference
-            # run_inference(ref_audio, ref_text, chunk, output_wav_path)
-            suppress_print(run_inference, ref_audio, ref_text, chunk, output_wav_path, fix_dur=audio_duration)
+            run_inference(ref_audio, ref_text, chunk, output_wav_path, fix_dur=audio_duration)
+            # suppress_print(run_inference, ref_audio, ref_text, chunk, output_wav_path, fix_dur=audio_duration)
             
             # Load generated audio
             generated_audio = AudioSegment.from_wav(output_wav_path)
@@ -1019,13 +1095,8 @@ def experiment_per_chunk_fix_duration_gen_cond_vad(final_audio_processing_id="1"
 
 ############################ 7 ############################
 # Generate audio per chunk (multiple words), which consist of a minimum number of characters.
-#   cond_on_last_gen_audio = False: conditioned on the fixed reference audio and text
-#   cond_on_last_gen_audio = True: conditioned on the last generated audio chunk and text (without the reference audio)
-def experiment_per_dynamic_sized_chunk(cond_on_last_gen_audio=False, min_chars=10):
-    if cond_on_last_gen_audio:
-        experiment_id = f'experiment_per_dynamic_sized_chunk__min_chars_{min_chars}_gen_cond'
-    else:
-        experiment_id = f'experiment_per_dynamic_sized_chunk_min_chars_{min_chars}'
+def experiment_per_dynamic_sized_chunk(min_chars=15):
+    experiment_id = f'experiment_per_dynamic_sized_chunk_min_chars_{min_chars}'
     
     ref_audio = ARGS.audio_ref_file
     ref_text = ARGS.text_ref_file
@@ -1046,13 +1117,9 @@ def experiment_per_dynamic_sized_chunk(cond_on_last_gen_audio=False, min_chars=1
             
     os.makedirs(Path(ARGS.audio_gen_output_folder, experiment_id), exist_ok=True)
     
-    original_ref_text = ref_text
-    original_ref_audio = ref_audio
-    
     for gen_text_file_name, gen_text in tqdm(gen_texts.items()):
         final_audio = AudioSegment.silent(duration=0)
-        ref_audio = original_ref_audio
-        ref_text = original_ref_text
+        
         for i, chunk in enumerate(gen_text):
             output_wav_path = Path(ARGS.audio_gen_output_folder, experiment_id, f'output_chunk_{i}.wav')
 
@@ -1075,19 +1142,9 @@ def experiment_per_dynamic_sized_chunk(cond_on_last_gen_audio=False, min_chars=1
             
             # Delete the generated audio file chunk
             os.remove(output_wav_path)
-            
-            # Update reference text
-            if cond_on_last_gen_audio:
-                ref_text = chunk + " ."
-                # Save the generated audio to a temporary file
-                generated_audio.export(Path(ARGS.audio_gen_output_folder, experiment_id, "chunk_tmp.wav"), format="wav")
-                ref_audio = Path(ARGS.audio_gen_output_folder, experiment_id, "chunk_tmp.wav")
 
         # Save final concatenated audio
         final_audio.export(Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav'), format="wav")
-        # Delete the temporary generated audio file
-        if os.path.exists(Path(ARGS.audio_gen_output_folder, experiment_id, "chunk_tmp.wav")):
-            os.remove(Path(ARGS.audio_gen_output_folder, experiment_id, "chunk_tmp.wav"))
         print_verbose(f"Audio saved as {Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav')}")
         
 ############################ 8 ############################
@@ -1357,13 +1414,15 @@ def experiment_per_chunk_fix_duration_gen_cond_acc(remove_silence=False):
         print_verbose(f"Audio saved as {Path(ARGS.audio_gen_output_folder, experiment_id, f'{os.path.splitext(os.path.basename(gen_text_file_name))[0]}.wav')}")
         
 ############################ 10 ############################
-# TODO Describe why this did not work.
+# This did not work.
 # Sample variant - does not work, number of samples differ after each generation, thus, accumulating the reference audio samples does not work.
 # Generates audio per chunk (word), set fix_duration value based on the length of the word.
 # Each generated word is trimmed at the end and used as reference for the next word.
 
 if __name__ == "__main__":   
     ARGS = parse_args()
+
+    set_model_paths()
     
     if ARGS.list_experiments:
         print("List of experiments to run:")
@@ -1412,7 +1471,7 @@ if __name__ == "__main__":
         
         # print("Running experiment 5...")
         # experiment_per_chunk_fix_duration(chunk_size=1)
-        # experiment_per_chunk_fix_duration(chunk_size=3)
+        experiment_per_chunk_fix_duration(chunk_size=3)
         # experiment_per_chunk_fix_duration(chunk_size=1, remove_silence=True)
         # experiment_per_chunk_fix_duration(chunk_size=3, remove_silence=True)
         
@@ -1421,32 +1480,34 @@ if __name__ == "__main__":
         # experiment_per_chunk_fix_duration_gen_cond_vad(final_audio_processing_id="2")
         
         # print("Running experiment 7...")
-        # experiment_per_dynamic_sized_chunk(cond_on_last_gen_audio=False)
-        # experiment_per_dynamic_sized_chunk(cond_on_last_gen_audio=True)
+        # experiment_per_dynamic_sized_chunk(min_chars=15)
         
         ##################################################################
         # DOES REQUIRE WORKING WITH THE WHOLE GENERATED AUDIO (ref & gen).
         ##################################################################
         
-        print("Running experiment 8...")
-        load_whisper_timestamped_model()        
-        experiment_per_chunk_fix_duration_gen_cond_whisper(remove_silence=True)
-        experiment_per_chunk_fix_duration_gen_cond_whisper(remove_silence=False)
+        # print("Running experiment 8...")
+        # load_whisper_timestamped_model()        
+        # experiment_per_chunk_fix_duration_gen_cond_whisper(remove_silence=True)
+        # experiment_per_chunk_fix_duration_gen_cond_whisper(remove_silence=False)
         
-        print("Running experiment 9...")
-        experiment_per_chunk_fix_duration_gen_cond_acc(remove_silence=True)
-        experiment_per_chunk_fix_duration_gen_cond_acc(remove_silence=False)
+        # print("Running experiment 9...")
+        # experiment_per_chunk_fix_duration_gen_cond_acc(remove_silence=True)
+        # experiment_per_chunk_fix_duration_gen_cond_acc(remove_silence=False)
         
     else:
         print(f"Running experiment {ARGS.experiment}...")
         if ARGS.experiment == 0:
             experiment_default_per_sentence()
+
         elif ARGS.experiment == 1:
             experiment_per_chunk(chunk_size=1)
             experiment_per_chunk(chunk_size=2)
+
         elif ARGS.experiment == 2:
             experiment_per_chunk_gen_cond(chunk_size=1)
             experiment_per_chunk_gen_cond(chunk_size=2)
+
         elif ARGS.experiment == 3:
             experiment_per_chunk_gen_cond_with_silence(chunk_size=1, silence_len_ms=100)
             experiment_per_chunk_gen_cond_with_silence(chunk_size=2, silence_len_ms=100)
@@ -1454,18 +1515,43 @@ if __name__ == "__main__":
             experiment_per_chunk_gen_cond_with_silence(chunk_size=2, silence_len_ms=300)
             experiment_per_chunk_gen_cond_with_silence(chunk_size=1, silence_len_ms=500)
             experiment_per_chunk_gen_cond_with_silence(chunk_size=2, silence_len_ms=500)
+
         elif ARGS.experiment == 4:
             experiment_dtw()
+
+            load_whisper_timestamped_model()
+            experiment_dtw(use_whisper=True)
+
         elif ARGS.experiment == 5:
             experiment_per_chunk_fix_duration(chunk_size=1)
             experiment_per_chunk_fix_duration(chunk_size=2)
+
             experiment_per_chunk_fix_duration(chunk_size=1, cond_on_last_gen_audio=True, sliding_window_size=4)
             experiment_per_chunk_fix_duration(chunk_size=2, cond_on_last_gen_audio=True, sliding_window_size=4)
+
             experiment_per_chunk_fix_duration(chunk_size=1, cond_on_last_gen_audio=True, sliding_window_size=2)
             experiment_per_chunk_fix_duration(chunk_size=2, cond_on_last_gen_audio=True, sliding_window_size=2)
+
         elif ARGS.experiment == 6:
-            experiment_per_dynamic_sized_chunk(cond_on_last_gen_audio=False)
-            experiment_per_dynamic_sized_chunk(cond_on_last_gen_audio=True)
+            experiment_per_chunk_fix_duration_gen_cond_vad(final_audio_processing_id="1")
+            experiment_per_chunk_fix_duration_gen_cond_vad(final_audio_processing_id="2")
+
+        elif ARGS.experiment == 7:
+            experiment_per_dynamic_sized_chunk(min_chars=15)
+        
+        ##################################################################
+        # DOES REQUIRE WORKING WITH THE WHOLE GENERATED AUDIO (ref & gen).
+        ##################################################################
+
+        elif ARGS.experiment == 8:
+            load_whisper_timestamped_model()        
+            experiment_per_chunk_fix_duration_gen_cond_whisper(remove_silence=True)
+            experiment_per_chunk_fix_duration_gen_cond_whisper(remove_silence=False)
+
+        elif ARGS.experiment == 9:
+            experiment_per_chunk_fix_duration_gen_cond_acc(remove_silence=True)
+            experiment_per_chunk_fix_duration_gen_cond_acc(remove_silence=False)
+
         else:
             print("Invalid experiment ID. Please select a valid experiment ID.")
             exit(0)
